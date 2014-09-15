@@ -1,0 +1,12 @@
+{
+  "id": "iiifviewer-debug",
+  "inherits": "iiifviewer.json",
+  "mode": "SIMPLE",
+
+  "define": {
+    "goog.DEBUG": true
+  },
+
+  "pretty-print": true,
+  "debug": true
+}
