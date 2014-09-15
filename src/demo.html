@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="description" content="">
+    <meta name="google" value="notranslate">
+    <meta name="author" content="Klokan Technologies GmbH (http://www.klokantech.com/)">
+    <title>IIIF Viewer demo</title>
+
+    <script src="http://localhost:9810/compile?id=iiifviewer-debug"></script>
+  </head>
+  <body>
+    <h2>IIIF Viewer demo</h2>
+    <a href="https://github.com/klokantech/iiifviewer">GitHub</a>
+    <div id="map" style="width:600px;height:400px;border:1px solid black;"></div>
+    <script type="text/javascript">
+      new IiifViewer('map', {
+        "image_host": "http://iiif.klokantech.com/",
+        "identifier" : "demo.jp2",
+        "width" : 7800,
+        "height" : 8300,
+        "scale_factors" : [ 1, 2, 4, 8, 16, 32, 64],
+        "tile_width" : 256,
+        "tile_height" : 256,
+        "formats" : [ "jpg" ],
+        "qualities" : [ "native" ],
+        "profile" : "http://library.stanford.edu/iiif/image-api/compliance.html#level1"
+      });
+    </script>
+  </body>
+</html>
