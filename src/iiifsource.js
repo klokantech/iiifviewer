@@ -8,7 +8,9 @@
 goog.provide('klokantech.IiifSource');
 
 goog.require('klokantech.IiifGrid');
+goog.require('klokantech.IiifTile');
 
+goog.require('ol.has');
 goog.require('ol.source.TileImage');
 
 
@@ -90,7 +92,9 @@ klokantech.IiifSource = function(options) {
 
         return baseUrl + query;
       }
-    }
+    },
+    tileClass: ol.has.CANVAS ?
+        goog.bind(klokantech.IiifTile, null, tileSize) : undefined
   });
 };
 goog.inherits(klokantech.IiifSource, ol.source.TileImage);
