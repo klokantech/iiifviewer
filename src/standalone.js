@@ -9,16 +9,7 @@ goog.provide('klokantech.standalone.IiifViewer');
 
 goog.require('klokantech.IiifViewer');
 goog.require('klokantech.SmoothMWZoomInteraction');
-
-goog.require('ol.ImageTile');
-goog.require('ol.Map');
-goog.require('ol.View');
-goog.require('ol.has');
-goog.require('ol.interaction');
-goog.require('ol.layer.Tile');
-goog.require('ol.proj.Projection');
-goog.require('ol.source.TileImage');
-goog.require('ol.tilegrid.XYZ');
+goog.require('klokantech.olrequires');
 
 
 
