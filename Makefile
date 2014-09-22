@@ -4,10 +4,11 @@ PLOVR = plovr-81ed862.jar
 
 all: serve
 serve:
-	java -jar $(PLOVR) serve iiifviewer-debug.json
+	java -jar $(PLOVR) serve standalone-debug.json plugin-debug.json
 build: build/iiifviewer.js
 build/iiifviewer.js:
-	java -jar $(PLOVR) build iiifviewer.json > build/iiifviewer.js
+	java -jar $(PLOVR) build standalone.json > build/iiifviewer.js
+	java -jar $(PLOVR) build plugin.json > build/ol-iiifviewer.js
 lint:
 	fixjsstyle --strict -r ./src
 	gjslint --strict -r ./src

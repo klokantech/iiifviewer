@@ -11,22 +11,18 @@ goog.require('goog.dom');
 goog.require('goog.net.Jsonp');
 
 goog.require('klokantech.IiifSource');
-goog.require('klokantech.SmoothMWZoomInteraction');
-
-goog.require('ol.Map');
-goog.require('ol.View');
-goog.require('ol.interaction');
-goog.require('ol.layer.Tile');
-goog.require('ol.proj.Projection');
 
 
 
 /**
  * @param {string|Element} element
  * @param {string|!Object.<string, *>} dataOrUrl
+ * @param {Function=} opt_initCallback
+ * @param {ol.interaction.Interaction=} opt_ownMWInteraction
  * @constructor
  */
-klokantech.IiifViewer = function(element, dataOrUrl) {
+klokantech.IiifViewer = function(element, dataOrUrl,
+                                 opt_initCallback, opt_ownMWInteraction) {
   var el = goog.dom.getElement(element);
   if (!el) throw Error('Invalid element');
 
@@ -37,6 +33,24 @@ klokantech.IiifViewer = function(element, dataOrUrl) {
   this.mapElement_ = el;
 
   /**
+   * @type {?ol.Map}
+   * @private
+   */
+  this.map_ = null;
+
+  /**
+   * @type {?ol.interaction.Interaction}
+   * @private
+   */
+  this.ownMWInteraction_ = opt_ownMWInteraction || null;
+
+  /**
+   * @type {?Function}
+   * @private
+   */
+  this.initCallback_ = opt_initCallback || null;
+
+  /**
    * @type {?string}
    * @private
    */
@@ -44,6 +58,14 @@ klokantech.IiifViewer = function(element, dataOrUrl) {
       dataOrUrl.substring(0, dataOrUrl.lastIndexOf('/')) : null;
 
   this.init_(dataOrUrl);
+};
+
+
+/**
+ * @return {?ol.Map}
+ */
+klokantech.IiifViewer.prototype.getMap = function() {
+  return this.map_;
 };
 
 
@@ -91,13 +113,19 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
       projection: proj,
       extent: [0, -h, w, 0]
     }),
-    interactions: ol.interaction.defaults({mouseWheelZoom: false}),
+    interactions: ol.interaction.defaults({
+      mouseWheelZoom: !goog.isDefAndNotNull(this.ownMWInteraction_)
+    }),
     controls: [],
     logo: false
   });
-  this.map_.addInteraction(new klokantech.SmoothMWZoomInteraction());
+  if (this.ownMWInteraction_) {
+    this.map_.addInteraction(this.ownMWInteraction_);
+  }
 
   this.map_.getView().fitExtent(proj.getExtent(), this.map_.getSize() || null);
+
+  if (this.initCallback_) this.initCallback_();
 };
 
 
@@ -115,6 +143,3 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
     this.initLayer_(dataOrUrl);
   }
 };
-
-
-goog.exportSymbol('IiifViewer', klokantech.IiifViewer);

@@ -1,6 +1,6 @@
 {
-  "id": "iiifviewer-debug",
-  "inherits": "iiifviewer.json",
+  "id": "standalone-debug",
+  "inherits": "standalone.json",
   "mode": "SIMPLE",
 
   "define": {

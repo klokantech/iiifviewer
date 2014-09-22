@@ -7,11 +7,10 @@
 
 goog.provide('klokantech.IiifSource');
 
-goog.require('klokantech.IiifGrid');
-goog.require('klokantech.IiifTile');
 
-goog.require('ol.has');
-goog.require('ol.source.TileImage');
+goog.require('goog.events');
+
+goog.require('klokantech.IiifGrid');
 
 
 /**
@@ -92,9 +91,28 @@ klokantech.IiifSource = function(options) {
 
         return baseUrl + query;
       }
-    },
-    tileClass: ol.has.CANVAS ?
-        goog.bind(klokantech.IiifTile, null, tileSize) : undefined
+    }
   });
+
+  if (ol.has.CANVAS) {
+    this.setTileLoadFunction(function(tile, url) {
+      var img = tile.getImage();
+      goog.events.listenOnce(img, goog.events.EventType.LOAD, function() {
+        if (img.naturalWidth > 0 &&
+            (img.naturalWidth != tileSize || img.naturalHeight != tileSize)) {
+          var canvas = goog.dom.createElement(goog.dom.TagName.CANVAS);
+          canvas.width = tileSize;
+          canvas.height = tileSize;
+
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+
+          var key = goog.object.findKey(tile, function(v) {return v == img;});
+          if (key) tile[key] = canvas;
+        }
+      }, true);
+      img.src = url;
+    });
+  }
 };
 goog.inherits(klokantech.IiifSource, ol.source.TileImage);

@@ -1,0 +1,15 @@
+{
+  "id": "plugin",
+  "inherits": "base.json",
+
+  "inputs": ["src/exports.js"],
+  "paths": ["src"],
+
+  "define": {
+    "goog.DEBUG": false
+  },
+
+  "externs": [
+    "ol3.0.0-externs.js",
+  ]
+}
