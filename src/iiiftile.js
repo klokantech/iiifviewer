@@ -8,8 +8,6 @@
 goog.provide('klokantech.IiifTile');
 
 goog.require('goog.events');
-goog.require('ol.ImageTile');
-goog.require('ol.has');
 
 
 

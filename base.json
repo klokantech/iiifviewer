@@ -1,0 +1,19 @@
+{
+  "id": "base",
+
+  "mode": "ADVANCED",
+
+  "output-wrapper": "/*\n * IiifViewer; Copyright (C) 2014 - Klokan Technologies GmbH\n * Powered by OpenLayers 3\n */\n%output%",
+
+  "checks": {
+    "checkTypes": "OFF",
+    "checkRegExp": "ERROR",
+    "checkVars": "ERROR",
+    "deprecated": "ERROR",
+    "fileoverviewTags": "ERROR",
+    "invalidCasts": "OFF",
+    "missingProperties": "ERROR",
+    "nonStandardJsDocs": "OFF",
+    "undefinedVars": "ERROR"
+  }
+}

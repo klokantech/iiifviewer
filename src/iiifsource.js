@@ -10,9 +10,6 @@ goog.provide('klokantech.IiifSource');
 goog.require('klokantech.IiifGrid');
 goog.require('klokantech.IiifTile');
 
-goog.require('ol.has');
-goog.require('ol.source.TileImage');
-
 
 /**
  * @typedef {{resolutions: !Array.<number>,

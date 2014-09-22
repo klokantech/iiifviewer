@@ -7,8 +7,6 @@
 
 goog.provide('klokantech.IiifGrid');
 
-goog.require('ol.tilegrid.XYZ');
-
 
 
 /**

@@ -11,22 +11,16 @@ goog.require('goog.dom');
 goog.require('goog.net.Jsonp');
 
 goog.require('klokantech.IiifSource');
-goog.require('klokantech.SmoothMWZoomInteraction');
-
-goog.require('ol.Map');
-goog.require('ol.View');
-goog.require('ol.interaction');
-goog.require('ol.layer.Tile');
-goog.require('ol.proj.Projection');
 
 
 
 /**
  * @param {string|Element} element
  * @param {string|!Object.<string, *>} dataOrUrl
+ * @param {ol.interaction.Interaction=} opt_ownMWInteraction
  * @constructor
  */
-klokantech.IiifViewer = function(element, dataOrUrl) {
+klokantech.IiifViewer = function(element, dataOrUrl, opt_ownMWInteraction) {
   var el = goog.dom.getElement(element);
   if (!el) throw Error('Invalid element');
 
@@ -35,6 +29,12 @@ klokantech.IiifViewer = function(element, dataOrUrl) {
    * @private
    */
   this.mapElement_ = el;
+
+  /**
+   * @type {?ol.interaction.Interaction}
+   * @private
+   */
+  this.ownMWInteraction_ = opt_ownMWInteraction || null;
 
   /**
    * @type {?string}
@@ -91,11 +91,13 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
       projection: proj,
       extent: [0, -h, w, 0]
     }),
-    interactions: ol.interaction.defaults({mouseWheelZoom: false}),
+    interactions: ol.interaction.defaults({mouseWheelZoom: false}), //TODO:
     controls: [],
     logo: false
   });
-  this.map_.addInteraction(new klokantech.SmoothMWZoomInteraction());
+  if (this.ownMWInteraction_) {
+    this.map_.addInteraction(this.ownMWInteraction_);
+  }
 
   this.map_.getView().fitExtent(proj.getExtent(), this.map_.getSize() || null);
 };
@@ -115,6 +117,3 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
     this.initLayer_(dataOrUrl);
   }
 };
-
-
-goog.exportSymbol('IiifViewer', klokantech.IiifViewer);
