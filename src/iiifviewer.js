@@ -36,6 +36,13 @@ klokantech.IiifViewer = function(element, dataOrUrl) {
    */
   this.mapElement_ = el;
 
+  /**
+   * @type {?string}
+   * @private
+   */
+  this.guessedUrl_ = goog.isString(dataOrUrl) ?
+      dataOrUrl.substring(0, dataOrUrl.lastIndexOf('/')) : null;
+
   this.init_(dataOrUrl);
 };
 
@@ -53,6 +60,9 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     if (host && id) {
       url = host + id;
     }
+  }
+  if (!url) {
+    url = this.guessedUrl_;
   }
   if (!url) {
     throw Error('Unable to determine base url');
