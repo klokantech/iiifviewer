@@ -12,5 +12,7 @@ goog.require('klokantech.IiifViewer');
 
 
 goog.exportSymbol('IiifViewer', klokantech.IiifViewer);
+goog.exportSymbol('IiifViewer.prototype.getMap',
+                  klokantech.IiifViewer.prototype.getMap);
 
 goog.exportSymbol('IiifSource', klokantech.IiifSource);

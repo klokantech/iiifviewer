@@ -16,10 +16,13 @@ goog.require('klokantech.olrequires');
 /**
  * @param {string|Element} element
  * @param {string|!Object.<string, *>} dataOrUrl
+ * @param {Function=} opt_initCallback
  * @constructor
  */
-klokantech.standalone.IiifViewer = function(element, dataOrUrl) {
-  goog.base(this, element, dataOrUrl, new klokantech.SmoothMWZoomInteraction());
+klokantech.standalone.IiifViewer = function(element, dataOrUrl,
+                                            opt_initCallback) {
+  goog.base(this, element, dataOrUrl,
+            opt_initCallback, new klokantech.SmoothMWZoomInteraction());
 };
 goog.inherits(klokantech.standalone.IiifViewer, klokantech.IiifViewer);
 
