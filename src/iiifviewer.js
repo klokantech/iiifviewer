@@ -91,7 +91,9 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
       projection: proj,
       extent: [0, -h, w, 0]
     }),
-    interactions: ol.interaction.defaults({mouseWheelZoom: false}), //TODO:
+    interactions: ol.interaction.defaults({
+      mouseWheelZoom: !goog.isDefAndNotNull(this.ownMWInteraction_)
+    }),
     controls: [],
     logo: false
   });
