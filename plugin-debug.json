@@ -1,7 +1,7 @@
 {
   "id": "plugin-debug",
   "inherits": "plugin.json",
-  "mode": "SIMPLE",
+  "mode": "ADVANCED",
 
   "define": {
     "goog.DEBUG": true

@@ -11,5 +11,10 @@
 
   "externs": [
     "ol3.0.0-externs.js",
-  ]
+    "ol3js/externs/olx.js"
+  ],
+
+  "checks": {
+    "duplicate": "OFF"
+  }
 }

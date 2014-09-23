@@ -63,8 +63,6 @@ klokantech.IiifSource = function(options) {
         /** @type {!olx.tilegrid.TileGridOptions} */({
           resolutions: options.resolutions.reverse(),
           origin: [0, 0],
-          projection: options.projection,
-          extent: options.projection.getExtent(),
           tileSize: tileSize
         })),
     tileUrlFunction: function(tileCoord, pixelRatio, projection) {
