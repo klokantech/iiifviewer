@@ -15,14 +15,17 @@ goog.require('klokantech.IiifSource');
 
 
 /**
+ * TODO: options object?
  * @param {string|Element} element
  * @param {string|!Object.<string, *>} dataOrUrl
- * @param {Function=} opt_initCallback
+ * @param {function(klokantech.IiifViewer)=} opt_initCallback
+ * @param {boolean=} opt_useWebGL
  * @param {ol.interaction.Interaction=} opt_ownMWInteraction
  * @constructor
  */
 klokantech.IiifViewer = function(element, dataOrUrl,
-                                 opt_initCallback, opt_ownMWInteraction) {
+                                 opt_initCallback, opt_useWebGL,
+                                 opt_ownMWInteraction) {
   var el = goog.dom.getElement(element);
   if (!el) throw Error('Invalid element');
 
@@ -39,13 +42,19 @@ klokantech.IiifViewer = function(element, dataOrUrl,
   this.map_ = null;
 
   /**
+   * @type {boolean}
+   * @private
+   */
+  this.useWebGL_ = opt_useWebGL == true;
+
+  /**
    * @type {?ol.interaction.Interaction}
    * @private
    */
   this.ownMWInteraction_ = opt_ownMWInteraction || null;
 
   /**
-   * @type {?Function}
+   * @type {?function(klokantech.IiifViewer)}
    * @private
    */
   this.initCallback_ = opt_initCallback || null;
@@ -100,7 +109,8 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     width: w,
     height: h,
     resolutions: /** @type {!Array.<number>} */(data['scale_factors']),
-    projection: proj
+    projection: proj,
+    crossOrigin: this.useWebGL_ ? '' : undefined
   });
   var layer = new ol.layer.Tile({
     source: /** @type {!ol.source.Source} */((src))
@@ -109,6 +119,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
   this.map_ = new ol.Map({
     layers: [layer],
     target: this.mapElement_,
+    renderer: this.useWebGL_ ? 'webgl' : undefined,
     view: new ol.View({
       projection: proj,
       extent: [0, -h, w, 0]
@@ -125,7 +136,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
 
   this.map_.getView().fitExtent(proj.getExtent(), this.map_.getSize() || null);
 
-  if (this.initCallback_) this.initCallback_();
+  if (this.initCallback_) this.initCallback_(this);
 };
 
 

@@ -5,7 +5,7 @@
  * Copyright 2014 Klokan Technologies Gmbh (www.klokantech.com)
  */
 
-goog.provide('klokantech.olrequires');
+goog.provide('klokantech.AllOLRequires');
 
 
 goog.require('ol.Map');

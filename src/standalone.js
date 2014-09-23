@@ -7,9 +7,9 @@
 
 goog.provide('klokantech.standalone.IiifViewer');
 
+goog.require('klokantech.AllOLRequires');
 goog.require('klokantech.IiifViewer');
 goog.require('klokantech.SmoothMWZoomInteraction');
-goog.require('klokantech.olrequires');
 
 
 
@@ -22,7 +22,8 @@ goog.require('klokantech.olrequires');
 klokantech.standalone.IiifViewer = function(element, dataOrUrl,
                                             opt_initCallback) {
   goog.base(this, element, dataOrUrl,
-            opt_initCallback, new klokantech.SmoothMWZoomInteraction());
+            opt_initCallback, undefined,
+            new klokantech.SmoothMWZoomInteraction());
 };
 goog.inherits(klokantech.standalone.IiifViewer, klokantech.IiifViewer);
 

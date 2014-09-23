@@ -16,6 +16,7 @@ goog.require('klokantech.IiifGrid');
 /**
  * @typedef {{resolutions: !Array.<number>,
  *            baseUrl: string,
+ *            crossOrigin: (string|null|undefined),
  *            width: number,
  *            height: number,
  *            projection: ol.proj.ProjectionLike,
@@ -91,7 +92,8 @@ klokantech.IiifSource = function(options) {
 
         return baseUrl + query;
       }
-    }
+    },
+    crossOrigin: options.crossOrigin
   });
 
   if (ol.has.CANVAS) {
