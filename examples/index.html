@@ -15,41 +15,70 @@
     <script src="../ol-iiifviewer.js"></script>
   </head>
   <body>
-    <div id="navbar-top">
+    <div id="navbar-top-small">
       <div class="container">
         <div class="logo">
-          <h1><a href="http://www.klokantech.com/">Klokan Technologies</a></h1>
+          <h1><a href="https://github.com/klokantech/iiifviewer">IIIF Viewer</a></h1>
         </div>
         <ul class="nav">
-          <li><a href="http://www.klokantech.com/contact/">contact</a></li>
+          <li><a href="https://github.com/klokantech/iiifviewer">Github</a></li>
+          <li><a href="http://www.klokantech.com/contact/">Contact</a></li>
         </ul>
         <div class="nav-mobile">
           <div id="nav-mobile-btn">#</div>
           <ul id="nav-mobile-nav">
-            <li><a href="http://www.klokantech.com/contact/">contact</a></li>          
+            <li><a href="https://github.com/klokantech/iiifviewer">Github</a></li>
+            <li><a href="http://www.klokantech.com/contact/">Contact</a></li>          
           </ul>
         </div>
       </div>
-    </div>   
-    <div class="row2"></div>
-    <div class="row">
-      <div class="col2">
-        Available examples:
-        <ul>
-          <li><a href="index.html">Simple example</a></li>
-          <li><a href="features.html">Draw and modify features</a></li>
-          <li><a href="webgl.html">WebGL color effects</a></li>
-        </ul>
+    </div>  
+    <div class="container main">
+      <div class="row">
+        <div class="col2">
+          Available examples:
+          <ul>
+            <li><a href="index.html">Simple example</a></li>
+            <li><a href="features.html">Draw and modify features</a></li>
+            <li><a href="webgl.html">WebGL color effects</a></li>
+          </ul>
+        </div>
+        <div class="col10">
+          <h3>Simple example</h3>
+          <div id="map" style="width:600px;height:400px;border:1px solid #000;"></div>
+          <script type="text/javascript">
+            var url = location.hash.toString().substr(1);
+            if (url.length < 2)
+              url = 'http://iiif.klokantech.com/demo.jp2/info.json';
+            new IiifViewer('map', url);
+          </script>
+          <h3>Source code:</h3>
+          <pre>&lt;!doctype html>
+<b>&lt;</b><b>html</b> lang<i>=</i><b>"en"</b><b>></b>
+  <b>&lt;</b><b>head</b><b>></b>
+    <b>&lt;</b><b>meta</b> charset<i>=</i><b>"utf-8"</b><b>></b>
+    <b>&lt;</b><b>meta</b> name<i>=</i><b>"viewport"</b> content<i>=</i><b>"width=device-width, initial-scale=1.0, maximum-scale=1.0"</b><b>></b>
+    <b>&lt;</b><b>title</b><b>></b>IIIF Viewer | Examples<b>&lt;/</b><b>title</b><b>></b>
+    <b>&lt;</b><b>script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"</b><b>></b><b>&lt;/</b><b>script</b><b>></b>
+    <b>&lt;</b><b>script src="../ol-iiifviewer.js"</b><b>></b><b>&lt;/</b><b>script</b><b>></b>
+  <b>&lt;/</b><b>head</b><b>></b>
+  <b>&lt;</b><b>body</b><b>></b>
+    <b>&lt;</b><b>div</b> id<i>=</i><b>"map"</b> style<i>=</i><b>"</b><b>width</b><i>:</i>600px<i>;</i><b>height</b><i>:</i>400px<i>;</i><b>border</b><i>:</i>1px solid #000<i>;</i><b>"</b><b>></b><b>&lt;/</b><b>div</b><b>></b>
+    <b>&lt;</b><b>script type="text/javascript"</b><b>></b>
+      <b>var</b> url <i>=</i> location<i>.</i>hash<i>.</i><b>toString</b><i>(</i><i>)</i><i>.</i><b>substr</b><i>(</i>1<i>)</i><i>;</i>
+      <b>if</b> <i>(</i>url<i>.</i>length <i>&lt;</i> 2<i>)</i>
+        url <i>=</i> <b>'http://iiif.klokantech.com/demo.jp2/info.json'</b><i>;</i>
+      <b>new</b> IiifViewer<i>(</i><b>'map'</b><i>,</i> url<i>)</i><i>;</i>
+    <b>&lt;/</b><b>script</b><b>></b>
+  <b>&lt;/</b><b>body</b><b>></b>
+<b>&lt;/</b><b>html</b><b>></b>
+</pre>
+        </div>
       </div>
-      <div class="col10">
-        <h3>IIIF Viewer | Simple example</h3>
-        <div id="map" style="width:600px;height:400px;border:1px solid #000;"></div>
-        <script type="text/javascript">
-          var url = location.hash.toString().substr(1);
-          if (url.length < 2)
-            url = 'http://iiif.klokantech.com/demo.jp2/info.json';
-          new IiifViewer('map', url);
-        </script>
+    </div>
+    <div class="footer">
+      <div class="container pad2">
+        Copyright &copy; 2014 <a href="http://klokantech.com">Klokan Technologies GmbH</a>
       </div>
     </div>
   </body>
