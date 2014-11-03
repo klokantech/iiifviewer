@@ -1,0 +1,13 @@
+#navbar-top-small{
+  background-color: #00adef;
+}
+#navbar-top-small h1 img{
+  width: 24px; 
+  height: 24px !important;
+}
+#navbar-top-small h1 a{
+  position: absolute; 
+  margin-left: 8px; 
+  font-size: 18px; 
+  padding-top: 3px;
+}
