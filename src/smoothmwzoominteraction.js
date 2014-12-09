@@ -126,6 +126,7 @@ klokantech.SmoothMWZoomInteraction.prototype.handleMapBrowserEvent =
 /**
  * @param {ol.Map} map Map.
  * @private
+ * @suppress {accessControls}
  */
 klokantech.SmoothMWZoomInteraction.prototype.doZoom_ =
     function(map) {

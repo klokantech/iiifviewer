@@ -1,4 +1,4 @@
-PLOVR = plovr-81ed862.jar
+PLOVR = plovr-1.1.0.jar
 
 .PHONY: serve build lint
 
