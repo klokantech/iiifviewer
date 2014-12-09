@@ -69,7 +69,7 @@ klokantech.IiifPrint.prototype.addText = function(
   }
   this.doc.setFontSize(size);
 
-  this.doc.text(xPos, yPos, text);
+  this.doc.text(text, xPos, yPos);
   this.doc.setTextColor(0, 0, 0);
 };
 
@@ -127,6 +127,22 @@ klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
 klokantech.IiifPrint.prototype.save = function(filename) {
   filename = filename.slice(-4) === '.pdf' ? filename : filename + '.pdf';
   this.doc.save(filename);
+};
+
+/**
+ * Draw rectangle
+ * @param {number} posX
+ * @param {number} posY
+ * @param {number} width
+ * @param {number} height
+ * @param {array} color Rgb eg. [255,0,0]
+ */
+klokantech.IiifPrint.prototype.addRectangle = function(
+        posX, posY, width, height, color){
+  var style = 'F';
+  this.doc.setFillColor(color[0], color[1], color[2]);
+  this.doc.rect(posX, posY, width, height, style);
+  this.doc.setFillColor(0, 0, 0);
 };
 
 /**
