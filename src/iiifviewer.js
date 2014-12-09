@@ -110,7 +110,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     height: h,
     resolutions: /** @type {!Array.<number>} */(data['scale_factors']),
     projection: proj,
-    crossOrigin: this.useWebGL_ ? '' : undefined
+    crossOrigin: this.useWebGL_ ? '' : 'anonymous'
   });
   var layer = new ol.layer.Tile({
     source: /** @type {!ol.source.Source} */((src))
