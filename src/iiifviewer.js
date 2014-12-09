@@ -115,7 +115,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     tileSize: /** @type {number|undefined} */
         (data['tile_width'] || tiles['width'] || undefined),
     projection: proj,
-    crossOrigin: this.useWebGL_ ? '' : undefined
+    crossOrigin: this.useWebGL_ ? '' : 'anonymous'
   });
   var layer = new ol.layer.Tile({
     source: /** @type {!ol.source.Source} */((src))
