@@ -74,17 +74,16 @@ klokantech.IiifPrint.prototype.addText = function(
 };
 
 /**
- * Place image to document
+ * Place image to document (only jpeg support)
  * @param {string} imgData
- * @param {string} format supported: 'jpeg', 'jpg', 'png'
  * @param {number} posX
  * @param {number} posY
  * @param {number} sizeX
  * @param {number} sizeY
  */
 klokantech.IiifPrint.prototype.addBase64Image = function(
-        imgData, format, posX, posY, sizeX, sizeY) {
-  this.doc.addImage(imgData, format, posX, posY, sizeX, sizeY);
+        imgData, posX, posY, sizeX, sizeY) {
+  this.doc.addImage(imgData, 'JPEG', posX, posY, sizeX, sizeY);
 };
 
 /**
@@ -98,7 +97,7 @@ klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
   var mapElement = goog.dom.isElement(map) ? map : goog.dom.getElement(map);
   var canvas = goog.dom.getElementsByTagNameAndClass(
           'canvas', null, mapElement)[0];
-  var data = canvas.toDataURL('image/png');
+  var data = canvas.toDataURL('image/jpeg');
 
   //calculate size of image (all image in page)
   var imgWidth, imgHeight, pxPerMm;
@@ -117,7 +116,7 @@ klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
   var posX = goog.isDefAndNotNull(posX) ? posX : 0;
   var posY = goog.isDefAndNotNull(posY) ? posX : 0;
 
-  this.doc.addImage(data, 'PNG', posX, posY, imgWidth, imgHeight);
+  this.doc.addImage(data, 'JPEG', posX, posY, imgWidth, imgHeight);
 };
 
 /**
