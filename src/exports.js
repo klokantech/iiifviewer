@@ -9,6 +9,7 @@ goog.provide('klokantech.IiifViewerExports');
 
 goog.require('klokantech.IiifSource');
 goog.require('klokantech.IiifViewer');
+goog.require('klokantech.IiifPrint');
 
 
 goog.exportSymbol('IiifViewer', klokantech.IiifViewer);
@@ -16,3 +17,5 @@ goog.exportSymbol('IiifViewer.prototype.getMap',
                   klokantech.IiifViewer.prototype.getMap);
 
 goog.exportSymbol('IiifSource', klokantech.IiifSource);
+
+goog.exportSymbol('IiifPrint', klokantech.IiifPrint);

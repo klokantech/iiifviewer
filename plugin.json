@@ -11,6 +11,7 @@
 
   "externs": [
     "ol3.0.0-externs.js",
+    "externs/jspdf.externs.js",
     "ol3js/externs/olx.js"
   ],
 
