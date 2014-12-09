@@ -99,7 +99,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
   if (!url) {
     throw Error('Unable to determine base url');
   }
-  var tileSize = data['tile_width'] || 256;
+  var tiles = (data['tiles'] || [{}])[0];
   var proj = new ol.proj.Projection({
     code: 'IIIF',
     units: 'pixels',
@@ -109,7 +109,11 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     baseUrl: /** @type {string} */(url),
     width: w,
     height: h,
-    resolutions: /** @type {!Array.<number>} */(data['scale_factors']),
+    resolutions: /** @type {!Array.<number>} */
+        (data['scale_factors'] || tiles['scaleFactors']),
+    extension: /** @type {string|undefined} */((data['formats'] || [])[0]),
+    tileSize: /** @type {number|undefined} */
+        (data['tile_width'] || tiles['width'] || undefined),
     projection: proj,
     crossOrigin: this.useWebGL_ ? '' : undefined
   });
