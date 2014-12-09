@@ -8,7 +8,8 @@
 goog.provide('klokantech.IiifViewer');
 
 goog.require('goog.dom');
-goog.require('goog.net.Jsonp');
+goog.require('goog.net.CorsXmlHttpFactory');
+goog.require('goog.net.XhrIo');
 
 goog.require('klokantech.IiifSource');
 
@@ -146,10 +147,14 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
  */
 klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
   if (goog.isString(dataOrUrl)) {
-    var jsonp = new goog.net.Jsonp(dataOrUrl);
-    jsonp.send(null, goog.bind(function(data) {
-      this.init_(data);
-    }, this));
+    var xhr_ = new goog.net.XhrIo(new goog.net.CorsXmlHttpFactory());
+    goog.events.listen(xhr_, goog.net.EventType.COMPLETE, function() {
+      if (xhr_.isSuccess()) {
+        var data = /** @type {Object.<string, *>} */(xhr_.getResponseJson());
+        this.init_(data);
+      }
+    }, false, this);
+    xhr_.send(dataOrUrl);
   } else {
     this.initLayer_(dataOrUrl);
   }
