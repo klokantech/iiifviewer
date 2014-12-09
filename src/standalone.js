@@ -9,6 +9,7 @@ goog.provide('klokantech.standalone.IiifViewer');
 
 goog.require('klokantech.AllOLRequires');
 goog.require('klokantech.IiifViewer');
+goog.require('klokantech.IiifPrint');
 goog.require('klokantech.SmoothMWZoomInteraction');
 
 
@@ -20,11 +21,23 @@ goog.require('klokantech.SmoothMWZoomInteraction');
  * @constructor
  */
 klokantech.standalone.IiifViewer = function(element, dataOrUrl,
-                                            opt_initCallback) {
+        opt_initCallback) {
   goog.base(this, element, dataOrUrl,
-            opt_initCallback, undefined,
-            new klokantech.SmoothMWZoomInteraction());
+          opt_initCallback, undefined,
+          new klokantech.SmoothMWZoomInteraction());
 };
 goog.inherits(klokantech.standalone.IiifViewer, klokantech.IiifViewer);
 
 goog.exportSymbol('IiifViewer', klokantech.standalone.IiifViewer);
+
+/**
+ * @param {string} layoutFormat
+ * @param {string} layoutOrientation
+ * @constructor
+ */
+klokantech.standalone.IiifPrint = function(layoutFormat, layoutOrientation) {
+  goog.base(this, layoutFormat, layoutOrientation);
+};
+goog.inherits(klokantech.standalone.IiifPrint, klokantech.IiifPrint);
+
+goog.exportSymbol('IiifPrint', klokantech.standalone.IiifPrint);
