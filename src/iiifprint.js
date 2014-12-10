@@ -97,7 +97,16 @@ klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
   var mapElement = goog.dom.isElement(map) ? map : goog.dom.getElement(map);
   var canvas = goog.dom.getElementsByTagNameAndClass(
           'canvas', null, mapElement)[0];
-  var data = canvas.toDataURL('image/jpeg');
+
+  //print white background to canvas
+  var context = canvas.getContext("2d");
+  var data = context.getImageData(0, 0, canvas.width, canvas.height);
+  var compositeOperation = context.globalCompositeOperation;
+  context.globalCompositeOperation = "destination-over";
+  context.fillStyle = '#ffffff';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  var imgData = canvas.toDataURL('image/jpeg');
 
   //calculate size of image (all image in page)
   var imgWidth, imgHeight, pxPerMm;
@@ -113,10 +122,11 @@ klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
     imgWidth = canvas.width / pxPerMm;
   }
 
+  //position
   var posX = goog.isDefAndNotNull(posX) ? posX : 0;
   var posY = goog.isDefAndNotNull(posY) ? posX : 0;
 
-  this.doc.addImage(data, 'JPEG', posX, posY, imgWidth, imgHeight);
+  this.doc.addImage(imgData, 'JPEG', posX, posY, imgWidth, imgHeight);
 };
 
 /**
@@ -137,7 +147,7 @@ klokantech.IiifPrint.prototype.save = function(filename) {
  * @param {array} color Rgb eg. [255,0,0]
  */
 klokantech.IiifPrint.prototype.addRectangle = function(
-        posX, posY, width, height, color){
+        posX, posY, width, height, color) {
   var style = 'F';
   this.doc.setFillColor(color[0], color[1], color[2]);
   this.doc.rect(posX, posY, width, height, style);
