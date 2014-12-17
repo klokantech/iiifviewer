@@ -43,12 +43,12 @@ klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
  * @param {string} text
  * @param {number} size
  * @param {Array|null} color
- * @param {number} xPos
- * @param {number} yPos
+ * @param {number} posX accepts negative values
+ * @param {number} posY accepts negative values
  * @returns {undefined}
  */
 klokantech.IiifPrint.prototype.addText = function(
-        text, size, color, xPos, yPos) {
+        text, size, color, posX, posY) {
   if (color !== null) {
     this.doc.setTextColor(color[0], color[1], color[2]);
   }
@@ -57,7 +57,9 @@ klokantech.IiifPrint.prototype.addText = function(
   }
   this.doc.setFontSize(size);
 
-  this.doc.text(text, xPos, yPos);
+  var pos = this.parsePosition_(posX, posY);
+  this.doc.text(text, pos[0], pos[1]);
+
   this.doc.setTextColor(0, 0, 0);
 };
 
@@ -71,7 +73,9 @@ klokantech.IiifPrint.prototype.addText = function(
  */
 klokantech.IiifPrint.prototype.addBase64Image = function(
         imgData, posX, posY, sizeX, sizeY) {
-  this.doc.addImage(imgData, 'JPEG', posX, posY, sizeX, sizeY);
+  var pos = this.parsePosition_(posX, posY);
+  
+  this.doc.addImage(imgData, 'JPEG', pos[0], pos[1], sizeX, sizeY);
 };
 
 /**
@@ -113,8 +117,9 @@ klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
   //position
   var posX = goog.isDefAndNotNull(posX) ? posX : 0;
   var posY = goog.isDefAndNotNull(posY) ? posX : 0;
+  var pos = this.parsePosition_(posX, posY);
 
-  this.doc.addImage(imgData, 'JPEG', posX, posY, imgWidth, imgHeight);
+  this.doc.addImage(imgData, 'JPEG', pos[0], pos[1], imgWidth, imgHeight);
 };
 
 /**
@@ -140,9 +145,10 @@ klokantech.IiifPrint.prototype.save = function(filename) {
  */
 klokantech.IiifPrint.prototype.addRectangle = function(
         posX, posY, width, height, color) {
-  var style = 'F';
   this.doc.setFillColor(color[0], color[1], color[2]);
-  this.doc.rect(posX, posY, width, height, style);
+  
+  var pos = this.parsePosition_(posX, posY);
+  this.doc.rect(pos[0], pos[1], width, height, 'F');
   this.doc.setFillColor(0, 0, 0);
 };
 
@@ -160,7 +166,7 @@ klokantech.IiifPrint.prototype.parseOrientation_ = function(orientation) {
   } else if (!orientation.indexOf(['l', 'p', 'landscape', 'portrait'])) {
     orientation = 'l';
   }
-  return orientation;
+  return orientation.substring(0, 1);
 };
 
 
@@ -183,7 +189,8 @@ klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
 
   if (size === 'auto') {
     //calculates page size
-    var viewPortSize = new goog.dom.ViewportSizeMonitor().getSize();
+    var viewPort = new goog.dom.ViewportSizeMonitor();
+    var viewPortSize = viewPort.getSize();
     pageSize = viewPortSize.width > viewPortSize.height
             ? [viewPortSize.width, viewPortSize.height]
             : [viewPortSize.height, viewPortSize.width];
@@ -198,4 +205,29 @@ klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
     pageSize = [297, 210];
   }
   return pageSize;
+};
+
+
+/**
+ * Calculates position from another corner 
+ * @param {number} xPos
+ * @param {number} yPos
+ * @returns {Array}
+ */
+klokantech.IiifPrint.prototype.parsePosition_ = function(xPos, yPos) {
+  if (xPos < 0) {
+    if (this.layoutOrientation === 'l') {
+      xPos = xPos + this.layoutFormat[0];
+    } else {
+      xPos = xPos + this.layoutFormat[1];
+    }
+  }
+  if (yPos < 0) {
+    if (this.layoutOrientation === 'l') {
+      yPos = yPos + this.layoutFormat[1];
+    } else {
+      yPos = yPos + this.layoutFormat[0];
+    }
+  }
+  return [xPos, yPos];
 };
