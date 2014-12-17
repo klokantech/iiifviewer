@@ -17,26 +17,14 @@ goog.require('goog.dom');
 klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
 
   /**
+   * @type array
+   */
+  this.layoutFormat = this.parseFormat_(layoutFormat);
+
+  /**
    * @type string
    */
   this.layoutOrientation = this.parseOrientation_(layoutOrientation);
-
-  /**
-   * @type Array
-   */
-  this.layoutFormats = {
-    a0: [1189, 841],
-    a1: [841, 594],
-    a2: [594, 420],
-    a3: [420, 297],
-    a4: [297, 210],
-    a5: [210, 148]
-  };
-
-  /**
-   * @type array
-   */
-  this.layoutFormat = this.layoutFormats[layoutFormat.toLowerCase()];
 
   /**
    * Default text size
@@ -54,7 +42,7 @@ klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
  * Adds text to document
  * @param {string} text
  * @param {number} size
- * @param {array} color Color in RGB format eg. [255, 0, 0]
+ * @param {Array|null} color
  * @param {number} xPos
  * @param {number} yPos
  * @returns {undefined}
@@ -88,16 +76,16 @@ klokantech.IiifPrint.prototype.addBase64Image = function(
 
 /**
  * Adds map to document
- * @param {string|object} map id of element with map
- * @param {number?} posX
- * @param {number?} posY
+ * @param {string} map
+ * @param {number|null} posX
+ * @param {number|null} posY
  */
 klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
   //get canvas with map
   var mapElement = goog.dom.isElement(map) ? map : goog.dom.getElement(map);
-  var canvas = goog.dom.getElementsByTagNameAndClass(
-          'canvas', null, mapElement)[0];
-
+  var canvases = goog.dom.getElementsByTagNameAndClass(
+          'canvas', null, mapElement);
+  var canvas = canvases[0];
   //print white background to canvas
   var context = canvas.getContext("2d");
   var data = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -111,13 +99,13 @@ klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
   //calculate size of image (all image in page)
   var imgWidth, imgHeight, pxPerMm;
   if (canvas.width > canvas.height) {
-    imgWidth = this.layoutOrientation.indexOf(['l', 'landscape']) ?
-            this.layoutFormat[0] : this.layoutFormat[1];
+    imgWidth = this.layoutOrientation.indexOf(['l', 'landscape']) > 0 ?
+            this.layoutFormat[1] : this.layoutFormat[0];
     pxPerMm = canvas.width / imgWidth;
     imgHeight = canvas.height / pxPerMm;
   } else {
-    imgHeight = this.layoutOrientation.indexOf(['l', 'landscape']) ?
-            this.layoutFormat[0] : this.layoutFormat[1];
+    imgHeight = this.layoutOrientation.indexOf(['p', 'portrait']) > 0 ?
+            this.layoutFormat[1] : this.layoutFormat[0];
     pxPerMm = canvas.height / imgHeight;
     imgWidth = canvas.width / pxPerMm;
   }
@@ -134,7 +122,11 @@ klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
  * @param {string} filename
  */
 klokantech.IiifPrint.prototype.save = function(filename) {
-  filename = filename.slice(-4) === '.pdf' ? filename : filename + '.pdf';
+  if (goog.isDefAndNotNull(filename)) {
+    filename = filename.slice(-4) === '.pdf' ? filename : filename + '.pdf';
+  } else {
+    filename = 'map';
+  }
   this.doc.save(filename);
 };
 
@@ -144,7 +136,7 @@ klokantech.IiifPrint.prototype.save = function(filename) {
  * @param {number} posY
  * @param {number} width
  * @param {number} height
- * @param {array} color Rgb eg. [255,0,0]
+ * @param {Array} color Rgb eg. [255,0,0]
  */
 klokantech.IiifPrint.prototype.addRectangle = function(
         posX, posY, width, height, color) {
@@ -169,4 +161,41 @@ klokantech.IiifPrint.prototype.parseOrientation_ = function(orientation) {
     orientation = 'l';
   }
   return orientation;
+};
+
+
+/**
+ * Validates or calculates size of page
+ * @param {string|Array} size Auto, page or array in mm
+ * @returns {array}
+ * @private
+ */
+klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
+  var layoutFormats = {
+    a0: [1189, 841],
+    a1: [841, 594],
+    a2: [594, 420],
+    a3: [420, 297],
+    a4: [297, 210],
+    a5: [210, 148]
+  };
+  var pageSize;
+
+  if (size === 'auto') {
+    //calculates page size
+    var viewPortSize = new goog.dom.ViewportSizeMonitor().getSize();
+    pageSize = viewPortSize.width > viewPortSize.height
+            ? [viewPortSize.width, viewPortSize.height]
+            : [viewPortSize.height, viewPortSize.width];
+  } else if (!goog.isArray(size) && goog.isDefAndNotNull(layoutFormats[size.toLowerCase()])) {
+    //chose from layoutformats
+    pageSize = layoutFormats[size.toLowerCase()];
+  } else if (goog.isArray(size) && goog.isDefAndNotNull(size[0]) && goog.isDefAndNotNull(size[1])) {
+    //is array with size passed
+    pageSize = size;
+  } else {
+    //give A4 by default
+    pageSize = [297, 210];
+  }
+  return pageSize;
 };
