@@ -1,12 +1,12 @@
 {
   "id": "standalone-debug",
   "inherits": "standalone.json",
-  "mode": "ADVANCED",
+  "mode": "SIMPLE",
 
   "define": {
-    "goog.DEBUG": false
+    "goog.DEBUG": true
   },
 
-  "pretty-print": false,
-  "debug": false
+  "pretty-print": true,
+  "debug": true
 }

@@ -74,21 +74,21 @@ klokantech.IiifPrint.prototype.addText = function(
 klokantech.IiifPrint.prototype.addBase64Image = function(
         imgData, posX, posY, sizeX, sizeY) {
   var pos = this.parsePosition_(posX, posY);
-  
+
   this.doc.addImage(imgData, 'JPEG', pos[0], pos[1], sizeX, sizeY);
 };
 
 /**
- * Adds map to document
- * @param {string} map
+ * Adds document from canvas
+ * @param {string} elem
  * @param {number|null} posX
  * @param {number|null} posY
  */
-klokantech.IiifPrint.prototype.addMap = function(map, posX, posY) {
-  //get canvas with map
-  var mapElement = goog.dom.isElement(map) ? map : goog.dom.getElement(map);
+klokantech.IiifPrint.prototype.addDocument = function(elem, posX, posY) {
+  //get canvas with document
+  var docElement = goog.dom.isElement(elem) ? elem : goog.dom.getElement(elem);
   var canvases = goog.dom.getElementsByTagNameAndClass(
-          'canvas', null, mapElement);
+          'canvas', null, docElement);
   var canvas = canvases[0];
   //print white background to canvas
   var context = canvas.getContext("2d");
@@ -130,7 +130,7 @@ klokantech.IiifPrint.prototype.save = function(filename) {
   if (goog.isDefAndNotNull(filename)) {
     filename = filename.slice(-4) === '.pdf' ? filename : filename + '.pdf';
   } else {
-    filename = 'map';
+    filename = 'doc';
   }
   this.doc.save(filename);
 };
@@ -146,7 +146,7 @@ klokantech.IiifPrint.prototype.save = function(filename) {
 klokantech.IiifPrint.prototype.addRectangle = function(
         posX, posY, width, height, color) {
   this.doc.setFillColor(color[0], color[1], color[2]);
-  
+
   var pos = this.parsePosition_(posX, posY);
   this.doc.rect(pos[0], pos[1], width, height, 'F');
   this.doc.setFillColor(0, 0, 0);
@@ -159,7 +159,7 @@ klokantech.IiifPrint.prototype.addRectangle = function(
  * @private
  */
 klokantech.IiifPrint.prototype.parseOrientation_ = function(orientation) {
-  if (orientation === 'auto') {
+  if (orientation === 'auto'|| !goog.isDefAndNotNull(orientation)) {
     var viewPortSize = new goog.dom.ViewportSizeMonitor().getSize();
     orientation = viewPortSize.width > viewPortSize.height ? 'l' : 'p';
 
@@ -187,7 +187,7 @@ klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
   };
   var pageSize;
 
-  if (size === 'auto') {
+  if (size === 'auto' || !goog.isDefAndNotNull(size)) {
     //calculates page size
     var viewPort = new goog.dom.ViewportSizeMonitor();
     var viewPortSize = viewPort.getSize();
