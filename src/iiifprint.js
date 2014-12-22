@@ -192,8 +192,8 @@ klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
     var viewPort = new goog.dom.ViewportSizeMonitor();
     var viewPortSize = viewPort.getSize();
     pageSize = viewPortSize.width > viewPortSize.height
-            ? [viewPortSize.width, viewPortSize.height]
-            : [viewPortSize.height, viewPortSize.width];
+            ? [viewPortSize.width / 4, viewPortSize.height / 4]
+            : [viewPortSize.height / 4, viewPortSize.width / 4];
   } else if (!goog.isArray(size) && goog.isDefAndNotNull(layoutFormats[size.toLowerCase()])) {
     //chose from layoutformats
     pageSize = layoutFormats[size.toLowerCase()];
