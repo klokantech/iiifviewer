@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="description" content="">
+    <meta name="google" value="notranslate">
+    <meta name="author" content="Klokan Technologies GmbH (http://www.klokantech.com/)">
+    <meta name="url" content="https://github.com/klokantech/iiifviewer">
+    <link href="http://klokantech.github.io/styles/base.css" rel="stylesheet">
+    <link href="../index.css" rel="stylesheet">
+    <script type="text/javascript" src="http://klokantech.github.io/styles/js/index.js"></script>
+    <title>IIIF Viewer | Examples</title>
+
+    <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
+    <script src="../ol-iiifviewer.js"></script>
+  </head>
+  <body>
+    <div id="navbar-top-small">
+      <div class="container">
+        <div class="logo">
+          <h1 style="padding-top: 10px;">
+            <img src="../img/iiifviewer-logo-white.png"> 
+            <a href="https://github.com/klokantech/iiifviewer">
+              <strong>IIIF</strong> Viewer
+            </a>
+          </h1>
+        </div>
+        <ul class="nav">
+          <li><a href="https://github.com/klokantech/iiifviewer">Github</a></li>
+          <li><a href="http://www.klokantech.com/contact/">Contact</a></li>
+        </ul>
+        <div class="nav-mobile">
+          <div id="nav-mobile-btn">#</div>
+          <ul id="nav-mobile-nav">
+            <li><a href="https://github.com/klokantech/iiifviewer">Github</a></li>
+            <li><a href="http://www.klokantech.com/contact/">Contact</a></li>          
+          </ul>
+        </div>
+      </div>
+    </div>  
+    <div class="container main">
+      <div class="row">
+        <div class="col2">
+          Available examples:
+          <ul>
+            <li><a href="index.html">Simple example</a></li>
+            <li><a href="features.html">Draw and modify features</a></li>
+            <li><a href="webgl.html">WebGL color effects</a></li>
+            <li><a href="print.html">Print to PDF</a></li>
+            <li><a href="permalink.html">Permalink</a></li>
+          </ul>
+        </div>
+        <div class="col10">
+          <h2>Permalink example</h2>
+          <div id="map" style="width:600px;height:400px;border:1px solid #000;"></div>
+          <script type="text/javascript">
+            var url = 'http://iiif.klokantech.com/demo.jp2/info.json';
+            var IIIF = new IiifViewer('map', url, function() {
+              //turn on permalink
+              IIIF.addPermalink({
+                'accuracy': 1, //def. 4
+                'geoFormat': true, //def. true
+                'addToEnd': 'layers=T'
+              });
+            });
+          </script>
+          <p class="padt-2">Coordinates to permalink can be added with method 
+            <code>addPermalink()</code>. This method accepts <i>boolean</i> 
+            or <i>object</i> with options:</p>
+          <ul>
+            <li>accuracy [number]</li>
+            <li>geoFormat [boolean] switcher between local coordinates x, y or geographical coordinates lat, long</li>
+            <li>addToEnd [string] adds custom string to permalink</li>
+          </ul>
+
+          <h3>Usage:</h3>
+          <pre>
+
+      var url = 'http://iiif.klokantech.com/demo.jp2/info.json';
+      var IIIF = new IiifViewer('map', url, function() {
+        <b>//turn on permalink</b>
+        IIIF.addPermalink({
+                accuracy: 1, <b>//def. 4</b>
+                geoFormat: true, <b>//def. true</b>
+                addToEnd: 'layers=T'
+              });
+      });
+          </pre>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="container pad-2">
+        Copyright &copy; 2014 <a href="http://klokantech.com">Klokan Technologies GmbH</a>
+      </div>
+    </div>
+  </body>
+</html>
