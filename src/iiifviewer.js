@@ -25,10 +25,11 @@ goog.require('klokantech.IiifSource');
  * @constructor
  */
 klokantech.IiifViewer = function(element, dataOrUrl,
-                                 opt_initCallback, opt_useWebGL,
-                                 opt_ownMWInteraction) {
+        opt_initCallback, opt_useWebGL,
+        opt_ownMWInteraction) {
   var el = goog.dom.getElement(element);
-  if (!el) throw Error('Invalid element');
+  if (!el)
+    throw Error('Invalid element');
 
   /**
    * @type {!Element}
@@ -65,7 +66,7 @@ klokantech.IiifViewer = function(element, dataOrUrl,
    * @private
    */
   this.guessedUrl_ = goog.isString(dataOrUrl) ?
-      dataOrUrl.substring(0, dataOrUrl.lastIndexOf('/')) : null;
+          dataOrUrl.substring(0, dataOrUrl.lastIndexOf('/')) : null;
 
   this.init_(dataOrUrl);
 };
@@ -85,7 +86,7 @@ klokantech.IiifViewer.prototype.getMap = function() {
  */
 klokantech.IiifViewer.prototype.initLayer_ = function(data) {
   var w = /** @type {number} */(data['width']),
-      h = /** @type {number} */(data['height']);
+          h = /** @type {number} */(data['height']);
   var url = data['@id'];
   if (!url) {
     var host = data['image_host'], id = data['identifier'];
@@ -110,10 +111,10 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     width: w,
     height: h,
     resolutions: /** @type {!Array.<number>} */
-        (data['scale_factors'] || tiles['scaleFactors']),
+            (data['scale_factors'] || tiles['scaleFactors']),
     extension: /** @type {string|undefined} */((data['formats'] || [])[0]),
     tileSize: /** @type {number|undefined} */
-        (data['tile_width'] || tiles['width'] || undefined),
+            (data['tile_width'] || tiles['width'] || undefined),
     projection: proj,
     crossOrigin: this.useWebGL_ ? '' : 'anonymous'
   });
@@ -139,9 +140,32 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     this.map_.addInteraction(this.ownMWInteraction_);
   }
 
-  this.map_.getView().fitExtent(proj.getExtent(), this.map_.getSize() || null);
+  //zoom to permalink
+  var hash = window.location.hash;
+  if (hash.length > 0 && (hash.indexOf('lat=') > 0 || hash.indexOf('x=') > 0)) {
+    var args = [];
+    var elements = hash.split('&');
+    elements[0] = elements[0].substring(1);
+    for (var i = 0; i < elements.length; i++) {
+      var pair = elements[i].split('=');
+      args[pair[0]] = pair[1];
+    }
+    if (goog.isDef(args['zoom'])) {
+      this.map_.getView().setCenter([parseFloat(args['lon']),
+        parseFloat(args['lat'])]);
+      this.map_.getView().setZoom(args['zoom']);
+    } else {
+      this.map_.getView().setCenter([parseFloat(args['y']),
+        parseFloat(args['x'])]);
+      this.map_.getView().setResolution(args['res']);
+    }
+  } else {
+    this.map_.getView().fitExtent(proj.getExtent(),
+            this.map_.getSize() || null);
+  }
 
-  if (this.initCallback_) this.initCallback_(this);
+  if (this.initCallback_)
+    this.initCallback_(this);
 };
 
 
@@ -161,5 +185,34 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
     xhr_.send(dataOrUrl);
   } else {
     this.initLayer_(dataOrUrl);
+  }
+};
+
+/**
+ * Turn permalinks on
+ * @param {boolean|!Object.<string,*>} opt
+ */
+klokantech.IiifViewer.prototype.addPermalink = function(opt) {
+  if (opt !== false) {
+    var accuracy = goog.isDefAndNotNull(opt['accuracy']) ? opt['accuracy'] : 4;
+    this.map_.on('moveend', function() {
+      var view = this.getView();
+      var center = view.getCenter();
+      var hash = '';
+      if (goog.isDefAndNotNull(opt['geoFormat'])
+              && opt['geoFormat'] === false) {
+        hash = "res=" + view.getResolution()
+                + "&x=" + center[1].toFixed(accuracy)
+                + "&y=" + center[0].toFixed(accuracy);
+      } else {
+        hash = "zoom=" + view.getZoom()
+                + "&lat=" + center[1].toFixed(accuracy)
+                + "&lon=" + center[0].toFixed(accuracy);
+      }
+      if (goog.isDefAndNotNull(opt['addToEnd'])) {
+        hash += '&' + opt['addToEnd'];
+      }
+      window.location.hash = hash;
+    });
   }
 };
