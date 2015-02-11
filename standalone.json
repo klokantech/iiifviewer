@@ -20,6 +20,7 @@
     "ol3js/externs/proj4js.js",
     "ol3js/externs/tilejson.js",
     "ol3js/externs/closure-compiler.js",
-    "externs/jspdf.externs.js"
+    "externs/jspdf.externs.js",
+    "//jquery-1.8.js"
   ]
 }

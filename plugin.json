@@ -12,7 +12,8 @@
   "externs": [
     "externs/ol3.0.0-externs.js",
     "externs/jspdf.externs.js",
-    "ol3js/externs/olx.js"
+    "ol3js/externs/olx.js",
+    "//jquery-1.8.js"
   ],
 
   "checks": {
