@@ -11,8 +11,9 @@
     <link href="../index.css" rel="stylesheet">
     <script type="text/javascript" src="http://klokantech.github.io/styles/js/index.js"></script>
     <title>IIIF Viewer | Examples</title>
-
-    <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
+    
+    <link href="http://openlayers.org/en/v3.2.0/css/ol.css" rel="stylesheet">
+    <script src="http://openlayers.org/en/v3.2.0/build/ol.js" type="text/javascript"></script>
     <script src="../ol-iiifviewer.js"></script>
   </head>
   <body>
@@ -56,13 +57,17 @@
           <div id="map" style="width:600px;height:400px;border:1px solid #000;"></div>
           <script type="text/javascript">
             var url = 'http://iiif.klokantech.com/demo.jp2/info.json';
-            var IIIF = new IiifViewer('map', url, function() {
+            new IiifViewer('map', url, function() {
               //turn on permalink
-              IIIF.addPermalink({
+              this.addPermalink({
                 'accuracy': 1, //def. 4
                 'geoFormat': true, //def. true
                 'addToEnd': 'layers=T'
               });
+
+              //overview map
+              var map = this.getMap();
+              map.addControl(new ol.control.OverviewMap());
             });
           </script>
           <p class="padt-2">Coordinates to permalink can be added with method 
