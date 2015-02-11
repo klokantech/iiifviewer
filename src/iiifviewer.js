@@ -44,6 +44,12 @@ klokantech.IiifViewer = function(element, dataOrUrl,
   this.map_ = null;
 
   /**
+   * @type {?Object}
+   * @private
+   */
+  this.data_ = null;
+
+  /**
    * @type {boolean}
    * @private
    */
@@ -152,7 +158,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     }
     if (goog.isDef(args['zoom'])) {
       this.map_.getView().setCenter([parseFloat(args['lon']),
-        parseFloat(args['lat'])]);
+        parseFloat(args['lat']) - this.data_.height]);
       this.map_.getView().setZoom(args['zoom']);
     } else {
       this.map_.getView().setCenter([parseFloat(args['y']),
@@ -184,6 +190,7 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
     }, false, this);
     xhr_.send(dataOrUrl);
   } else {
+    this.data_ = dataOrUrl;
     this.initLayer_(dataOrUrl);
   }
 };
@@ -195,18 +202,20 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
 klokantech.IiifViewer.prototype.addPermalink = function(opt) {
   if (opt !== false) {
     var accuracy = goog.isDefAndNotNull(opt['accuracy']) ? opt['accuracy'] : 4;
+    var height = this.data_.height;
     this.map_.on('moveend', function() {
       var view = this.getView();
       var center = view.getCenter();
       var hash = '';
+      var x = parseFloat(center[1]) + height;
       if (goog.isDefAndNotNull(opt['geoFormat'])
               && opt['geoFormat'] === false) {
         hash = "res=" + view.getResolution()
-                + "&x=" + center[1].toFixed(accuracy)
+                + "&x=" + x.toFixed(accuracy)
                 + "&y=" + center[0].toFixed(accuracy);
       } else {
         hash = "zoom=" + view.getZoom()
-                + "&lat=" + center[1].toFixed(accuracy)
+                + "&lat=" + x.toFixed(accuracy)
                 + "&lon=" + center[0].toFixed(accuracy);
       }
       if (goog.isDefAndNotNull(opt['addToEnd'])) {
