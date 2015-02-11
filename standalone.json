@@ -3,7 +3,7 @@
   "inherits": "base.json",
 
   "inputs": ["src/standalone.js", "ol3js/externs/olx.js"],
-  "paths": ["src", "ol3js/src"],
+  "paths": ["src", "ol3js/src", "ol3js/build/ol.ext"],
 
   "define": {
     "goog.DEBUG": false,
