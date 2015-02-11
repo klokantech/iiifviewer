@@ -162,7 +162,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
       this.map_.getView().setZoom(args['zoom']);
     } else {
       this.map_.getView().setCenter([parseFloat(args['y']),
-        parseFloat(args['x'])]);
+        - parseFloat(args['x'])]);
       this.map_.getView().setResolution(args['res']);
     }
   } else {
@@ -207,13 +207,14 @@ klokantech.IiifViewer.prototype.addPermalink = function(opt) {
       var view = this.getView();
       var center = view.getCenter();
       var hash = '';
-      var x = parseFloat(center[1]) + height;
+      var x = parseFloat(center[1]);
       if (goog.isDefAndNotNull(opt['geoFormat'])
               && opt['geoFormat'] === false) {
         hash = "res=" + view.getResolution()
-                + "&x=" + x.toFixed(accuracy)
+                + "&x=" + Math.abs(x.toFixed(accuracy))
                 + "&y=" + center[0].toFixed(accuracy);
       } else {
+        x += height;
         hash = "zoom=" + view.getZoom()
                 + "&lat=" + x.toFixed(accuracy)
                 + "&lon=" + center[0].toFixed(accuracy);
