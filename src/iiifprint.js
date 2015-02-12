@@ -159,9 +159,8 @@ klokantech.IiifPrint.prototype.addRectangle = function(
  * @private
  */
 klokantech.IiifPrint.prototype.parseOrientation_ = function(orientation) {
-  if (orientation === 'auto'|| !goog.isDefAndNotNull(orientation)) {
-    var viewPortSize = new goog.dom.ViewportSizeMonitor().getSize();
-    orientation = viewPortSize.width > viewPortSize.height ? 'l' : 'p';
+  if (orientation === 'auto' || !goog.isDefAndNotNull(orientation)) {
+    orientation = window.innerWidth > window.innerHeight ? 'l' : 'p';
 
   } else if (!orientation.indexOf(['l', 'p', 'landscape', 'portrait'])) {
     orientation = 'l';
@@ -189,11 +188,11 @@ klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
 
   if (size === 'auto' || !goog.isDefAndNotNull(size)) {
     //calculates page size
-    var viewPort = new goog.dom.ViewportSizeMonitor();
-    var viewPortSize = viewPort.getSize();
-    pageSize = viewPortSize.width > viewPortSize.height
-            ? [viewPortSize.width / 4, viewPortSize.height / 4]
-            : [viewPortSize.height / 4, viewPortSize.width / 4];
+    var viewPortWidth = window.innerWidth;
+    var viewPortHeight = window.innerHeight;
+    pageSize = viewPortWidth > viewPortHeight
+            ? [viewPortWidth / 4, viewPortHeight / 4]
+            : [viewPortHeight / 4, viewPortWidth / 4];
   } else if (!goog.isArray(size) && goog.isDefAndNotNull(layoutFormats[size.toLowerCase()])) {
     //chose from layoutformats
     pageSize = layoutFormats[size.toLowerCase()];
