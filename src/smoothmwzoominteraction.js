@@ -24,7 +24,9 @@ goog.require('ol.interaction.Interaction');
  * @extends {ol.interaction.Interaction}
  */
 klokantech.SmoothMWZoomInteraction = function() {
-  goog.base(this);
+  goog.base(this, {
+    handleEvent: goog.bind(this.handleEvent_, this)
+  });
 
   /**
    * @private
@@ -88,9 +90,11 @@ klokantech.SmoothMWZoomInteraction.prototype.setMap = function(map) {
 
 
 /**
- * @inheritDoc
+ * @param {ol.mapBrowserEvent} mapBrowserEvent
+ * @return {boolean}
+ * @private
  */
-klokantech.SmoothMWZoomInteraction.prototype.handleMapBrowserEvent =
+klokantech.SmoothMWZoomInteraction.prototype.handleEvent_ =
     function(mapBrowserEvent) {
   var stopEvent = false;
   if (mapBrowserEvent.type ==
