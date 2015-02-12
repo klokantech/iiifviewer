@@ -117,10 +117,10 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     width: w,
     height: h,
     resolutions: /** @type {!Array.<number>} */
-            (data['scale_factors'] || tiles['scaleFactors']),
+        (data['scale_factors'] || tiles['scaleFactors']),
     extension: /** @type {string|undefined} */((data['formats'] || [])[0]),
     tileSize: /** @type {number|undefined} */
-            (data['tile_width'] || tiles['width'] || undefined),
+        (data['tile_width'] || tiles['width'] || undefined),
     projection: proj,
     crossOrigin: this.useWebGL_ ? '' : undefined
   });
@@ -158,16 +158,16 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     }
     if (goog.isDef(args['zoom'])) {
       this.map_.getView().setCenter([parseFloat(args['lon']),
-        parseFloat(args['lat']) - this.data_.height]);
+            parseFloat(args['lat']) - this.data_.height]);
       this.map_.getView().setZoom(args['zoom']);
     } else {
       this.map_.getView().setCenter([parseFloat(args['y']),
-        - parseFloat(args['x'])]);
+            -parseFloat(args['x'])]);
       this.map_.getView().setResolution(args['res']);
     }
   } else {
     this.map_.getView().fitExtent(proj.getExtent(),
-            this.map_.getSize() || null);
+        this.map_.getSize() || null);
   }
 
   if (this.initCallback_)
@@ -195,6 +195,7 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
   }
 };
 
+
 /**
  * Turn permalinks on
  * @param {boolean|!Object.<string,*>} opt
@@ -208,16 +209,16 @@ klokantech.IiifViewer.prototype.addPermalink = function(opt) {
       var center = view.getCenter();
       var hash = '';
       var x = parseFloat(center[1]);
-      if (goog.isDefAndNotNull(opt['geoFormat'])
-              && opt['geoFormat'] === false) {
-        hash = "res=" + view.getResolution()
-                + "&x=" + Math.abs(x.toFixed(accuracy))
-                + "&y=" + center[0].toFixed(accuracy);
+      if (goog.isDefAndNotNull(opt['geoFormat']) &&
+              opt['geoFormat'] === false) {
+        hash = 'res=' + view.getResolution() +
+               '&x=' + Math.abs(x.toFixed(accuracy)) +
+               '&y=' + center[0].toFixed(accuracy);
       } else {
         x += height;
-        hash = "zoom=" + view.getZoom()
-                + "&lat=" + x.toFixed(accuracy)
-                + "&lon=" + center[0].toFixed(accuracy);
+        hash = 'zoom=' + view.getZoom() +
+               '&lat=' + x.toFixed(accuracy) +
+               '&lon=' + center[0].toFixed(accuracy);
       }
       if (goog.isDefAndNotNull(opt['addToEnd'])) {
         hash += '&' + opt['addToEnd'];
