@@ -29,7 +29,11 @@ klokantech.standalone.IiifViewer = function(element, dataOrUrl,
 goog.inherits(klokantech.standalone.IiifViewer, klokantech.IiifViewer);
 
 goog.exportSymbol('IiifViewer', klokantech.standalone.IiifViewer);
-
+goog.exportSymbol('IiifViewer.prototype.getMap',
+        klokantech.IiifViewer.prototype.getMap);
+goog.exportSymbol('IiifViewer.prototype.addPermalink',
+        klokantech.IiifViewer.prototype.addPermalink);
+        
 /**
  * @param {string} layoutFormat
  * @param {string} layoutOrientation
