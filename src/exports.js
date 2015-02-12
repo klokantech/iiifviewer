@@ -14,9 +14,9 @@ goog.require('klokantech.IiifPrint');
 
 goog.exportSymbol('IiifViewer', klokantech.IiifViewer);
 goog.exportSymbol('IiifViewer.prototype.getMap',
-        klokantech.IiifViewer.prototype.getMap);
+                  klokantech.IiifViewer.prototype.getMap);
 goog.exportSymbol('IiifViewer.prototype.addPermalink',
-        klokantech.IiifViewer.prototype.addPermalink);
+                  klokantech.IiifViewer.prototype.addPermalink);
 
 goog.exportSymbol('IiifSource', klokantech.IiifSource);
 
