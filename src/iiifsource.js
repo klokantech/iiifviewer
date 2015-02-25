@@ -84,6 +84,9 @@ klokantech.IiifSource = function(options) {
         var maxx = Math.min(minx + tileBaseSize, width);
         var maxy = Math.min(miny + tileBaseSize, height);
 
+        maxx = scale * Math.floor(maxx / scale);
+        maxy = scale * Math.floor(maxy / scale);
+
         var query = '/' + minx + ',' + miny + ',' +
             (maxx - minx) + ',' + (maxy - miny) +
             '/pct:' + (100 / scale) + '/0/' + quality + '.' + extension;
