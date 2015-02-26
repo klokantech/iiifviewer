@@ -19,12 +19,12 @@ klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
   /**
    * @type array
    */
-  this.layoutFormat = this.parseFormat_(layoutFormat);
+  this.layoutFormat = layoutFormat;
 
   /**
    * @type string
    */
-  this.layoutOrientation = this.parseOrientation_(layoutOrientation);
+  this.layoutOrientation = layoutOrientation;
 
   /**
    * Default text size
@@ -33,9 +33,17 @@ klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
   this.textSize = 20;
 
   /**
-   * @type {object}
+   * @type {object|null}
    */
-  this.doc = new jsPDF(this.layoutOrientation, 'mm', this.layoutFormat);
+  this.doc = null;
+};
+
+klokantech.IiifPrint.prototype.init_ = function() {
+  if (this.doc === null) {
+    this.layoutOrientation = this.parseOrientation_(this.layoutOrientation);
+    this.layoutFormat = this.parseFormat_(this.layoutFormat);
+    this.doc = new jsPDF(this.layoutOrientation, 'mm', this.layoutFormat);
+  }
 };
 
 /**
@@ -49,6 +57,7 @@ klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
  */
 klokantech.IiifPrint.prototype.addText = function(
         text, size, color, posX, posY) {
+  this.init_();
   if (color !== null) {
     this.doc.setTextColor(color[0], color[1], color[2]);
   }
@@ -73,6 +82,7 @@ klokantech.IiifPrint.prototype.addText = function(
  */
 klokantech.IiifPrint.prototype.addBase64Image = function(
         imgData, posX, posY, sizeX, sizeY) {
+  this.init_();
   var pos = this.parsePosition_(posX, posY);
 
   this.doc.addImage(imgData, 'JPEG', pos[0], pos[1], sizeX, sizeY);
@@ -92,26 +102,35 @@ klokantech.IiifPrint.prototype.addDocument = function(elem, posX, posY) {
   var canvas = canvases[0];
   //print white background to canvas
   var context = canvas.getContext("2d");
-  var data = context.getImageData(0, 0, canvas.width, canvas.height);
-  var compositeOperation = context.globalCompositeOperation;
   context.globalCompositeOperation = "destination-over";
   context.fillStyle = '#ffffff';
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   var imgData = canvas.toDataURL('image/jpeg');
+  var imgWidth, imgHeight;
 
-  //calculate size of image (all image in page)
-  var imgWidth, imgHeight, pxPerMm;
-  if (canvas.width > canvas.height) {
-    imgWidth = this.layoutOrientation.indexOf(['l', 'landscape']) > 0 ?
-            this.layoutFormat[1] : this.layoutFormat[0];
-    pxPerMm = canvas.width / imgWidth;
-    imgHeight = canvas.height / pxPerMm;
+  //add size to page size
+  if (this.layoutFormat === 'auto') {
+    this.layoutFormat = [canvas.width / 4, canvas.height / 4];
+    imgWidth = canvas.width / 4;
+    imgHeight = canvas.height / 4;
+
+    this.init_();
   } else {
-    imgHeight = this.layoutOrientation.indexOf(['p', 'portrait']) > 0 ?
-            this.layoutFormat[1] : this.layoutFormat[0];
-    pxPerMm = canvas.height / imgHeight;
-    imgWidth = canvas.width / pxPerMm;
+    this.init_();
+    //calculate size of image (all image in page)
+    var pxPerMm;
+    if (canvas.width > canvas.height) {
+      imgWidth = this.layoutOrientation.indexOf(['l', 'landscape']) > 0 ?
+              this.layoutFormat[1] : this.layoutFormat[0];
+      pxPerMm = canvas.width / imgWidth;
+      imgHeight = canvas.height / pxPerMm;
+    } else {
+      imgHeight = this.layoutOrientation.indexOf(['p', 'portrait']) > 0 ?
+              this.layoutFormat[1] : this.layoutFormat[0];
+      pxPerMm = canvas.height / imgHeight;
+      imgWidth = canvas.width / pxPerMm;
+    }
   }
 
   //position
@@ -145,6 +164,7 @@ klokantech.IiifPrint.prototype.save = function(filename) {
  */
 klokantech.IiifPrint.prototype.addRectangle = function(
         posX, posY, width, height, color) {
+  this.init_();
   this.doc.setFillColor(color[0], color[1], color[2]);
 
   var pos = this.parsePosition_(posX, posY);
@@ -193,10 +213,12 @@ klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
     pageSize = viewPortWidth > viewPortHeight
             ? [viewPortWidth / 4, viewPortHeight / 4]
             : [viewPortHeight / 4, viewPortWidth / 4];
-  } else if (!goog.isArray(size) && goog.isDefAndNotNull(layoutFormats[size.toLowerCase()])) {
+  } else if (!goog.isArray(size)
+          && goog.isDefAndNotNull(layoutFormats[size.toLowerCase()])) {
     //chose from layoutformats
     pageSize = layoutFormats[size.toLowerCase()];
-  } else if (goog.isArray(size) && goog.isDefAndNotNull(size[0]) && goog.isDefAndNotNull(size[1])) {
+  } else if (goog.isArray(size) && goog.isDefAndNotNull(size[0])
+          && goog.isDefAndNotNull(size[1])) {
     //is array with size passed
     pageSize = size;
   } else {
