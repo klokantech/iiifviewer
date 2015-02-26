@@ -116,7 +116,7 @@ klokantech.IiifPrint.prototype.addDocument = function(elem, posX, posY) {
 
   //position
   var posX = goog.isDefAndNotNull(posX) ? posX : 0;
-  var posY = goog.isDefAndNotNull(posY) ? posX : 0;
+  var posY = goog.isDefAndNotNull(posY) ? posY : 0;
   var pos = this.parsePosition_(posX, posY);
 
   this.doc.addImage(imgData, 'JPEG', pos[0], pos[1], imgWidth, imgHeight);
