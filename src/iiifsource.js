@@ -10,8 +10,6 @@ goog.provide('klokantech.IiifSource');
 
 goog.require('goog.events');
 
-goog.require('klokantech.IiifGrid');
-
 
 /**
  * @typedef {{resolutions: !Array.<number>,
@@ -59,12 +57,11 @@ klokantech.IiifSource = function(options) {
   }
 
   goog.base(this, {
-    tileGrid: new klokantech.IiifGrid(
-        /** @type {!olx.tilegrid.TileGridOptions} */({
-          resolutions: options.resolutions.reverse(),
-          origin: [0, 0],
-          tileSize: tileSize
-        })),
+    tileGrid: new ol.tilegrid.TileGrid({
+      resolutions: options.resolutions.reverse(),
+      origin: [0, 0],
+      tileSize: tileSize
+    }),
     tileUrlFunction: function(tileCoord, pixelRatio, projection) {
       var z = tileCoord[0];
       if (maxZoom < z) return undefined;

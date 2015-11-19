@@ -166,8 +166,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
       this.map_.getView().setResolution(args['res']);
     }
   } else {
-    this.map_.getView().fitExtent(proj.getExtent(),
-        this.map_.getSize() || null);
+    this.map_.getView().fit(proj.getExtent(), this.map_.getSize() || null);
   }
 
   if (this.initCallback_)

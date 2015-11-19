@@ -11,11 +11,12 @@
 
   "externs": [
     "ol3-externs.js",
-    "ol3js/externs/olx.js",
-    "//jquery-1.8.js"
+    "ol3js/externs/olx.js"
   ],
 
   "checks": {
     "duplicate": "OFF"
-  }
+  },
+
+  "output-wrapper": "(function() {%output%})();"
 }

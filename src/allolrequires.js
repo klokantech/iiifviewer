@@ -15,4 +15,4 @@ goog.require('ol.interaction');
 goog.require('ol.layer.Tile');
 goog.require('ol.proj.Projection');
 goog.require('ol.source.TileImage');
-goog.require('ol.tilegrid.XYZ');
+goog.require('ol.tilegrid.TileGrid');
