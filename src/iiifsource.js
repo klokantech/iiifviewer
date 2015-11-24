@@ -56,11 +56,20 @@ klokantech.IiifSource = function(options) {
     tierSizes.push([tilesX_, tilesY_]);
   }
 
+  var tilePixelRatio = Math.min((window.devicePixelRatio || 1), 4);
+
+  var logicalTileSize = tileSize / tilePixelRatio;
+  var logicalResolutions = tilePixelRatio == 1 ? options.resolutions :
+      goog.array.map(options.resolutions, function(el, i, arr) {
+        return el * tilePixelRatio;
+      });
+
   goog.base(this, {
+    tilePixelRatio: tilePixelRatio,
     tileGrid: new ol.tilegrid.TileGrid({
-      resolutions: options.resolutions.reverse(),
+      resolutions: logicalResolutions.reverse(),
       origin: [0, 0],
-      tileSize: tileSize
+      tileSize: logicalTileSize
     }),
     tileUrlFunction: function(tileCoord, pixelRatio, projection) {
       var z = tileCoord[0];
