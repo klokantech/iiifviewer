@@ -22,5 +22,5 @@
     "ol3js/externs/closure-compiler.js"
   ],
 
-  "output-wrapper": "(function() {%output%})();"
+  "output-wrapper": "/* IiifViewer; Copyright (C) 2014 - Klokan Technologies GmbH; Powered by OpenLayers 3 */\n(function() {%output%})();"
 }
