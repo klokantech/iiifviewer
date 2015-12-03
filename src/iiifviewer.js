@@ -7,6 +7,7 @@
 
 goog.provide('klokantech.IiifViewer');
 
+goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.net.CorsXmlHttpFactory');
 goog.require('goog.net.XhrIo');
@@ -93,11 +94,11 @@ klokantech.IiifViewer.prototype.getMap = function() {
 klokantech.IiifViewer.prototype.initLayer_ = function(data) {
   var w = /** @type {number} */(data['width']),
           h = /** @type {number} */(data['height']);
-  var url = data['@id'];
+  var url = /** @type {string|undefined} */(data['@id']);
   if (!url) {
     var host = data['image_host'], id = data['identifier'];
     if (host && id) {
-      url = host + id;
+      url = /** @type {string} */(host + id);
     }
   }
   if (!url) {
@@ -106,6 +107,15 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
   if (!url) {
     throw Error('Unable to determine base url');
   }
+  var domains = data['domains'];
+  if (domains && domains.length > 0) {
+    var uri = new goog.Uri(url);
+    url = [];
+    goog.array.forEach(domains, function(domain) {
+      uri.setDomain(domain);
+      url.push(uri.toString());
+    });
+  }
   var tiles = (data['tiles'] || [{}])[0];
   var proj = new ol.proj.Projection({
     code: 'IIIF',
@@ -113,7 +123,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     extent: [0, -h, w, 0]
   });
   var src = new klokantech.IiifSource({
-    baseUrl: /** @type {string} */(url),
+    baseUrl: url,
     width: w,
     height: h,
     resolutions: /** @type {!Array.<number>} */

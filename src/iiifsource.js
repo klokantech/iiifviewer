@@ -13,7 +13,7 @@ goog.require('goog.events');
 
 /**
  * @typedef {{resolutions: !Array.<number>,
- *            baseUrl: string,
+ *            baseUrl: (string|!Array.<string>),
  *            crossOrigin: (string|null|undefined),
  *            width: number,
  *            height: number,
@@ -97,7 +97,15 @@ klokantech.IiifSource = function(options) {
             (maxx - minx) + ',' + (maxy - miny) +
             '/pct:' + (100 / scale) + '/0/' + quality + '.' + extension;
 
-        return baseUrl + query;
+        var url;
+        if (goog.isArray(baseUrl)) {
+          var hash = (x << z) + y;
+          url = baseUrl[goog.math.modulo(hash, baseUrl.length)];
+        } else {
+          url = baseUrl;
+        }
+
+        return url + query;
       }
     },
     crossOrigin: options.crossOrigin
