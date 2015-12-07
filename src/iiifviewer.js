@@ -138,16 +138,20 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     source: /** @type {!ol.source.Source} */((src))
   });
 
+  this.viewZoomFactor_ = 1.1; // to emulate smoother zooming
+
   this.map_ = new ol.Map({
     layers: [layer],
     target: this.mapElement_,
     renderer: this.useWebGL_ ? 'webgl' : undefined,
     view: new ol.View({
       projection: proj,
-      extent: [0, -h, w, 0]
+      extent: [0, -h, w, 0],
+      zoomFactor: this.viewZoomFactor_
     }),
     interactions: ol.interaction.defaults({
-      mouseWheelZoom: !goog.isDefAndNotNull(this.ownMWInteraction_)
+      mouseWheelZoom: !goog.isDefAndNotNull(this.ownMWInteraction_),
+      zoomDelta: Math.LN2 / Math.log(this.viewZoomFactor_)
     }),
     controls: [],
     logo: false
