@@ -7,6 +7,7 @@
 
 goog.provide('klokantech.IiifViewerExports');
 
+goog.require('klokantech.IiifPrint');
 goog.require('klokantech.IiifSource');
 goog.require('klokantech.IiifViewer');
 

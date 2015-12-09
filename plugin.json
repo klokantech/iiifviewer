@@ -10,6 +10,7 @@
   },
 
   "externs": [
+    "externs/jspdf.externs.js",
     "ol3-externs.js",
     "ol3js/externs/olx.js"
   ],

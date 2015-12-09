@@ -14,6 +14,7 @@
   },
 
   "externs": [
+    "externs/jspdf.externs.js",
     "ol3js/externs/bingmaps.js",
     "ol3js/externs/geojson.js",
     "ol3js/externs/oli.js",
