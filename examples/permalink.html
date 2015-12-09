@@ -11,17 +11,17 @@
     <link href="../index.css" rel="stylesheet">
     <script type="text/javascript" src="http://klokantech.github.io/styles/js/index.js"></script>
     <title>IIIF Viewer | Examples</title>
-    
-    <link href="http://openlayers.org/en/v3.2.0/css/ol.css" rel="stylesheet">
-    <script src="http://openlayers.org/en/v3.2.0/build/ol.js" type="text/javascript"></script>
-    <script src="../ol-iiifviewer.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.11.2/ol.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.11.2/ol.min.js" type="text/javascript"></script>
+    <script src="http://cdn.klokantech.com/iiifviewer/v1.1/ol-iiifviewer.js" type="text/javascript"></script>
   </head>
   <body>
     <div id="navbar-top-small">
       <div class="container">
         <div class="logo">
           <h1 style="padding-top: 10px;">
-            <img src="../img/iiifviewer-logo-white.png"> 
+            <img src="../img/iiifviewer-logo-white.png">
             <a href="https://github.com/klokantech/iiifviewer">
               <strong>IIIF</strong> Viewer
             </a>
@@ -35,11 +35,11 @@
           <div id="nav-mobile-btn">#</div>
           <ul id="nav-mobile-nav">
             <li><a href="https://github.com/klokantech/iiifviewer">Github</a></li>
-            <li><a href="http://www.klokantech.com/contact/">Contact</a></li>          
+            <li><a href="http://www.klokantech.com/contact/">Contact</a></li>
           </ul>
         </div>
       </div>
-    </div>  
+    </div>
     <div class="container main">
       <div class="row">
         <div class="col2">
@@ -47,7 +47,6 @@
           <ul>
             <li><a href="index.html">Simple example</a></li>
             <li><a href="features.html">Draw and modify features</a></li>
-            <li><a href="webgl.html">WebGL color effects</a></li>
             <li><a href="print.html">Print to PDF</a></li>
             <li><a href="permalink.html">Permalink</a></li>
           </ul>
@@ -60,7 +59,7 @@
             new IiifViewer('map', url, function() {
               //turn on permalink
               this.addPermalink({
-                'accuracy': 1, //def. 4
+                'accuracy': 1, //def. 2
                 'geoFormat': true, //def. true
                 'addToEnd': 'layers=T'
               });
@@ -70,8 +69,8 @@
               map.addControl(new ol.control.OverviewMap());
             });
           </script>
-          <p class="padt-2">Coordinates to permalink can be added with method 
-            <code>addPermalink()</code>. This method accepts <i>boolean</i> 
+          <p class="padt-2">Coordinates to permalink can be added with method
+            <code>addPermalink()</code>. This method accepts <i>boolean</i>
             or <i>object</i> with options:</p>
           <ul>
             <li>accuracy [number]</li>

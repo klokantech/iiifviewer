@@ -12,15 +12,15 @@
     <script type="text/javascript" src="http://klokantech.github.io/styles/js/index.js"></script>
     <title>IIIF Viewer | Draw and modify features</title>
 
-    <script src="http://openlayers.org/en/v3.0.0/build/ol.js" type="text/javascript"></script>
-    <script src="../ol-iiifviewer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.11.2/ol.min.js" type="text/javascript"></script>
+    <script src="http://cdn.klokantech.com/iiifviewer/v1.1/ol-iiifviewer.js" type="text/javascript"></script>
   </head>
   <body>
     <div id="navbar-top-small">
       <div class="container">
         <div class="logo">
           <h1 style="padding-top: 10px;">
-            <img src="../img/iiifviewer-logo-white.png"> 
+            <img src="../img/iiifviewer-logo-white.png">
             <a href="https://github.com/klokantech/iiifviewer">
               <strong>IIIF</strong> Viewer
             </a>
@@ -34,11 +34,11 @@
           <div id="nav-mobile-btn">#</div>
           <ul id="nav-mobile-nav">
             <li><a href="https://github.com/klokantech/iiifviewer">Github</a></li>
-            <li><a href="http://www.klokantech.com/contact/">Contact</a></li>          
+            <li><a href="http://www.klokantech.com/contact/">Contact</a></li>
           </ul>
         </div>
       </div>
-    </div>   
+    </div>
     <div class="container main">
       <div class="row">
         <div class="col2">
@@ -46,7 +46,6 @@
           <ul>
             <li><a href="index.html">Simple example</a></li>
             <li><a href="features.html">Draw and modify features</a></li>
-            <li><a href="webgl.html">WebGL color effects</a></li>
             <li><a href="print.html">Print to PDF</a></li>
             <li><a href="permalink.html">Permalink</a></li>
           </ul>
@@ -57,18 +56,21 @@
           <script type="text/javascript">
             var init = function(viewer) {
               var map = viewer.getMap();
-
-              var featureOverlay = new ol.FeatureOverlay({
+              var collection = new ol.Collection();
+              var featureOverlay = new ol.layer.Vector({
+                map: map,
+                source: new ol.source.Vector({
+                  features: collection
+                }),
                 style: new ol.style.Style({
                   fill: new ol.style.Fill({color: 'rgba(255, 255, 255, 0.2)'}),
                   stroke: new ol.style.Stroke({color: '#ffcc33', width: 2}),
                   image: new ol.style.Circle({radius: 7, fill: new ol.style.Fill({color: '#ffcc33'})})
                 })
               });
-              featureOverlay.setMap(map);
 
               var modify = new ol.interaction.Modify({
-                features: featureOverlay.getFeatures(),
+                features: collection,
                 // the SHIFT key must be pressed to delete vertices, so
                 // that new vertices can be drawn at the same position
                 // of existing vertices
@@ -82,7 +84,7 @@
               var draw; // global so we can remove it later
               function addInteraction() {
                 draw = new ol.interaction.Draw({
-                  features: featureOverlay.getFeatures(),
+                  features: collection,
                   type: typeSelect.value
                 });
                 map.addInteraction(draw);
