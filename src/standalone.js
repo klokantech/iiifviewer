@@ -28,3 +28,5 @@ klokantech.standalone.IiifViewer = function(element, dataOrUrl,
 goog.inherits(klokantech.standalone.IiifViewer, klokantech.IiifViewer);
 
 goog.exportSymbol('IiifViewer', klokantech.standalone.IiifViewer);
+goog.exportSymbol('IiifViewer.prototype.addPermalink',
+                  klokantech.IiifViewer.prototype.addPermalink);
