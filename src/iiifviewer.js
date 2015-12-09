@@ -251,7 +251,7 @@ klokantech.IiifViewer.prototype.setPermazoom_ = function(permazoom) {
  */
 klokantech.IiifViewer.prototype.addPermalink = function(opt) {
   if (opt !== false) {
-    var accuracy = goog.isDefAndNotNull(opt['accuracy']) ? opt['accuracy'] : 4;
+    var accuracy = goog.isDefAndNotNull(opt['accuracy']) ? opt['accuracy'] : 2;
     var height = this.data_.height;
     this.map_.on('moveend', function() {
       var view = this.map_.getView();
