@@ -155,8 +155,7 @@ klokantech.SmoothMWZoomInteraction.prototype.doZoom_ =
   }
   var delta = goog.math.clamp(this.delta_, -1, 1);
   var resolution = Math.pow(2, this.delta_) * currentResolution;
-  resolution = goog.math.clamp(resolution,
-                               view.minResolution_, view.maxResolution_);
+  resolution = view.constrainResolution(resolution);
 
   if (this.lastAnchor_) {
     var center = view.calculateCenterZoom(resolution, this.lastAnchor_);

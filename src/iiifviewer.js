@@ -138,8 +138,6 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     source: /** @type {!ol.source.Source} */((src))
   });
 
-  this.viewZoomFactor_ = 1.1; // to emulate smoother zooming
-
   this.map_ = new ol.Map({
     layers: [layer],
     target: this.mapElement_,
@@ -147,11 +145,11 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     view: new ol.View({
       projection: proj,
       extent: [0, -h, w, 0],
-      zoomFactor: this.viewZoomFactor_
+      zoomFactor: klokantech.IiifViewer.VIEW_ZOOM_FACTOR
     }),
     interactions: ol.interaction.defaults({
       mouseWheelZoom: !goog.isDefAndNotNull(this.ownMWInteraction_),
-      zoomDelta: Math.LN2 / Math.log(this.viewZoomFactor_)
+      zoomDelta: Math.round(klokantech.IiifViewer.VIEW_ZOOM_RELATION)
     }),
     controls: [],
     logo: false
@@ -159,7 +157,6 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
   if (this.ownMWInteraction_) {
     this.map_.addInteraction(this.ownMWInteraction_);
   }
-
   //zoom to permalink
   var hash = window.location.hash;
   if (hash.length > 0 && (hash.indexOf('lat=') > 0 || hash.indexOf('x=') > 0)) {
@@ -173,7 +170,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     if (goog.isDef(args['zoom'])) {
       this.map_.getView().setCenter([parseFloat(args['lon']),
             parseFloat(args['lat']) - this.data_.height]);
-      this.map_.getView().setZoom(args['zoom']);
+      this.setPermazoom_(parseFloat(args['zoom']));
     } else {
       this.map_.getView().setCenter([parseFloat(args['y']),
             -parseFloat(args['x'])]);
@@ -210,6 +207,45 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
 
 
 /**
+ * @define {number} View zoom factor (2 -> single resolution per data zoom).
+ *                  To emulate smoother zooming
+ */
+klokantech.IiifViewer.VIEW_ZOOM_FACTOR = 1.1;
+
+
+/**
+ * @type {number} Relation between view zoom level and data zoom level.
+ */
+klokantech.IiifViewer.VIEW_ZOOM_RELATION =
+    Math.LN2 / Math.log(klokantech.IiifViewer.VIEW_ZOOM_FACTOR);
+
+
+/**
+ * Calculates floating-point zoom level independent on the view smoothness.
+ * @return {number}
+ * @private
+ */
+klokantech.IiifViewer.prototype.getPermazoom_ = function() {
+  var viewZoom = this.map_.getView().getZoom();
+  if (viewZoom) {
+    viewZoom /= klokantech.IiifViewer.VIEW_ZOOM_RELATION;
+  }
+  return viewZoom;
+};
+
+
+/**
+ * Sets floating-point zoom level independent on the view smoothness.
+ * @param {number} permazoom
+ * @private
+ */
+klokantech.IiifViewer.prototype.setPermazoom_ = function(permazoom) {
+  var viewZoom = klokantech.IiifViewer.VIEW_ZOOM_RELATION * permazoom;
+  this.map_.getView().setZoom(Math.round(viewZoom));
+};
+
+
+/**
  * Turn permalinks on
  * @param {boolean|!Object.<string,*>} opt
  */
@@ -218,7 +254,7 @@ klokantech.IiifViewer.prototype.addPermalink = function(opt) {
     var accuracy = goog.isDefAndNotNull(opt['accuracy']) ? opt['accuracy'] : 4;
     var height = this.data_.height;
     this.map_.on('moveend', function() {
-      var view = this.getView();
+      var view = this.map_.getView();
       var center = view.getCenter();
       var hash = '';
       var x = parseFloat(center[1]);
@@ -229,7 +265,7 @@ klokantech.IiifViewer.prototype.addPermalink = function(opt) {
                '&y=' + center[0].toFixed(accuracy);
       } else {
         x += height;
-        hash = 'zoom=' + view.getZoom() +
+        hash = 'zoom=' + this.getPermazoom_().toFixed(accuracy) +
                '&lat=' + x.toFixed(accuracy) +
                '&lon=' + center[0].toFixed(accuracy);
       }
@@ -237,6 +273,6 @@ klokantech.IiifViewer.prototype.addPermalink = function(opt) {
         hash += '&' + opt['addToEnd'];
       }
       window.location.hash = hash;
-    });
+    }, this);
   }
 };
