@@ -4,6 +4,7 @@
   "mode": "ADVANCED",
 
   "define": {
+    "klokantech.IiifViewer.VIEW_ZOOM_FACTOR": 2,
     "goog.DEBUG": true
   },
 

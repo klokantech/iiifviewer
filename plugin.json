@@ -6,6 +6,7 @@
   "paths": ["src"],
 
   "define": {
+    "klokantech.IiifViewer.VIEW_ZOOM_FACTOR": 2,
     "goog.DEBUG": false
   },
 
