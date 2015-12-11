@@ -21,12 +21,13 @@ goog.require('klokantech.IiifSource');
  * @param {string|Element} element
  * @param {string|!Object.<string, *>} dataOrUrl
  * @param {function(klokantech.IiifViewer)=} opt_initCallback
+ * @param {string=} opt_crossOrigin
  * @param {boolean=} opt_useWebGL
  * @param {ol.interaction.Interaction=} opt_ownMWInteraction
  * @constructor
  */
 klokantech.IiifViewer = function(element, dataOrUrl,
-        opt_initCallback, opt_useWebGL,
+        opt_initCallback, opt_crossOrigin, opt_useWebGL,
         opt_ownMWInteraction) {
   var el = goog.dom.getElement(element);
   if (!el)
@@ -49,6 +50,12 @@ klokantech.IiifViewer = function(element, dataOrUrl,
    * @private
    */
   this.data_ = null;
+
+  /**
+   * @type {string|undefined}
+   * @private
+   */
+  this.crossOrigin_ = opt_crossOrigin;
 
   /**
    * @type {boolean}
@@ -132,7 +139,8 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
     tileSize: /** @type {number|undefined} */
         (data['tile_width'] || tiles['width'] || undefined),
     projection: proj,
-    crossOrigin: this.useWebGL_ ? '' : 'anonymous'
+    crossOrigin: goog.isString(this.crossOrigin_) ? this.crossOrigin_ :
+        (this.useWebGL_ ? '' : undefined)
   });
   var layer = new ol.layer.Tile({
     source: /** @type {!ol.source.Source} */((src))
