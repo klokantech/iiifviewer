@@ -67,13 +67,13 @@ klokantech.SmoothMWZoomInteraction.DELTA_ADJUST = 12;
  * @define {number} Maximal value for the adjusted delta. ([-max, max])
  *                                (speed -- resolution delta per timeout)
  */
-klokantech.SmoothMWZoomInteraction.MAX_DELTA = 1.5;
+klokantech.SmoothMWZoomInteraction.MAX_DELTA = 1;
 
 
 /**
  * @define {number} Timeout duration.
  */
-klokantech.SmoothMWZoomInteraction.TIMEOUT_DURATION = 125;
+klokantech.SmoothMWZoomInteraction.TIMEOUT_DURATION = 200;
 
 
 /** @inheritDoc */
