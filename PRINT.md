@@ -59,7 +59,7 @@ See live [example in IiifViewer examples](http://klokantech.github.io/iiifviewer
     <script type="text/javascript">
       //init IiifViewer
       var url = location.hash.toString().substr(1);
-      if (url.length < 2) url = 'http://iiif.klokantech.com/demo.jp2/info.json';
+      if (url.length < 2) url = 'http://demo.iiifhosting.com/iiif/demo/info.json';
       new IiifViewer('viewer', url, undefined, '');
 
       function print() {
