@@ -7,10 +7,11 @@
 
 /**
  * @constructor
- * @param {string} layoutFormat
- * @param {string} layoutOrientation
+ * @param {string} orientation
+ * @param {string} unit
+ * @param {Array} format
  */
-var jsPDF = function(layoutFormat, layoutOrientation) {};
+var jsPDF = function(orientation, unit, format) {};
 
 jsPDF.prototype.setTextColor = function() {};
 jsPDF.prototype.setFontSize = function() {};

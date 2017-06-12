@@ -17,11 +17,15 @@ goog.require('goog.dom');
  * @param {string} layoutOrientation
  */
 klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
+  /**
+   * @type {string}
+   */
+  this.layoutFormatString = layoutFormat;
 
   /**
-   * @type {array}
+   * @type {Array}
    */
-  this.layoutFormat = layoutFormat;
+  this.layoutFormat = null;
 
   /**
    * @type {string}
@@ -35,7 +39,7 @@ klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
   this.textSize = 20;
 
   /**
-   * @type {?object}
+   * @type {?Object}
    */
   this.doc = null;
 };
@@ -47,7 +51,8 @@ klokantech.IiifPrint = function(layoutFormat, layoutOrientation) {
 klokantech.IiifPrint.prototype.init_ = function() {
   if (this.doc === null) {
     this.layoutOrientation = this.parseOrientation_(this.layoutOrientation);
-    this.layoutFormat = this.parseFormat_(this.layoutFormat);
+    this.layoutFormat =
+        this.parseFormat_(this.layoutFormat || this.layoutFormatString);
     this.doc = new jsPDF(this.layoutOrientation, 'mm', this.layoutFormat);
   }
 };
@@ -119,7 +124,7 @@ klokantech.IiifPrint.prototype.addDocument = function(elem, posX, posY) {
   var imgWidth, imgHeight;
 
   //add size to page size
-  if (this.layoutFormat === 'auto') {
+  if (this.layoutFormatString === 'auto') {
     this.layoutFormat = [canvas.width / 4, canvas.height / 4];
     imgWidth = canvas.width / 4;
     imgHeight = canvas.height / 4;
@@ -130,12 +135,12 @@ klokantech.IiifPrint.prototype.addDocument = function(elem, posX, posY) {
     //calculate size of image (all image in page)
     var pxPerMm;
     if (canvas.width > canvas.height) {
-      imgWidth = this.layoutOrientation.indexOf(['l', 'landscape']) > 0 ?
+      imgWidth = this.layoutOrientation.charAt(0) == 'l' ?
               this.layoutFormat[1] : this.layoutFormat[0];
       pxPerMm = canvas.width / imgWidth;
       imgHeight = canvas.height / pxPerMm;
     } else {
-      imgHeight = this.layoutOrientation.indexOf(['p', 'portrait']) > 0 ?
+      imgHeight = this.layoutOrientation.charAt(0) == 'p' ?
               this.layoutFormat[1] : this.layoutFormat[0];
       pxPerMm = canvas.height / imgHeight;
       imgWidth = canvas.width / pxPerMm;
@@ -191,7 +196,7 @@ klokantech.IiifPrint.prototype.addRectangle = function(
 klokantech.IiifPrint.prototype.parseOrientation_ = function(orientation) {
   if (orientation === 'auto' || !goog.isDefAndNotNull(orientation)) {
     orientation = window.innerWidth > window.innerHeight ? 'l' : 'p';
-  } else if (!orientation.indexOf(['l', 'p', 'landscape', 'portrait'])) {
+  } else if (orientation.charAt(0) != 'l' && orientation.charAt(0) != 'p') {
     orientation = 'l';
   }
   return orientation.substring(0, 1);
@@ -201,17 +206,17 @@ klokantech.IiifPrint.prototype.parseOrientation_ = function(orientation) {
 /**
  * Validates or calculates size of page
  * @param {string|Array} size Auto, page or array in mm
- * @return {array}
+ * @return {Array}
  * @private
  */
 klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
   var layoutFormats = {
-    a0: [1189, 841],
-    a1: [841, 594],
-    a2: [594, 420],
-    a3: [420, 297],
-    a4: [297, 210],
-    a5: [210, 148]
+    'a0': [1189, 841],
+    'a1': [841, 594],
+    'a2': [594, 420],
+    'a3': [420, 297],
+    'a4': [297, 210],
+    'a5': [210, 148]
   };
   var pageSize;
 
@@ -232,7 +237,7 @@ klokantech.IiifPrint.prototype.parseFormat_ = function(size) {
     pageSize = size;
   } else {
     //give A4 by default
-    pageSize = [297, 210];
+    pageSize = layoutFormats['a4'];
   }
   return pageSize;
 };

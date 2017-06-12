@@ -1,7 +1,6 @@
 {
   "id": "standalone-debug",
   "inherits": "standalone.json",
-  "mode": "SIMPLE",
 
   "define": {
     "goog.DEBUG": true

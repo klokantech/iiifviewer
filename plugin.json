@@ -5,20 +5,9 @@
   "inputs": ["src/exports.js"],
   "paths": ["src"],
 
-  "define": {
-    "klokantech.IiifViewer.VIEW_ZOOM_FACTOR": 2,
-    "goog.DEBUG": false
-  },
-
   "externs": [
     "externs/jspdf.externs.js",
-    "ol3-externs.js",
-    "ol3js/externs/olx.js"
-  ],
-
-  "checks": {
-    "duplicate": "OFF"
-  },
-
-  "output-wrapper": "/* IiifViewer; Copyright (C) 2014 - Klokan Technologies GmbH; Powered by OpenLayers 3 */\n(function() {%output%})();"
+    "ol-externs.js",
+    "ol/src/ol/typedefs.js"
+  ]
 }

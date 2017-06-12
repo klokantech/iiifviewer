@@ -3,17 +3,56 @@
 
   "mode": "ADVANCED",
 
-  "output-wrapper": "/*\n * IiifViewer; Copyright (C) 2014 - Klokan Technologies GmbH\n * Powered by OpenLayers 3\n */\n%output%",
+  "output-wrapper": "/* IiifViewer; Copyright (C) 2017 - Klokan Technologies GmbH; Powered by OpenLayers 3 */\n(function() {%output%})();",
+
+  "define": {
+    "goog.DEBUG": false
+  },
 
   "checks": {
-    "checkTypes": "OFF",
+    "accessControls": "ERROR",
+    "ambiguousFunctionDecl": "ERROR",
+    "checkEventfulObjectDisposal": "ERROR",
     "checkRegExp": "ERROR",
+    "checkTypes": "OFF",
     "checkVars": "ERROR",
+    "conformanceViolations": "ERROR",
+    "const": "ERROR",
+    "constantProperty": "ERROR",
     "deprecated": "ERROR",
+    "deprecatedAnnotations": "ERROR",
+    "duplicateMessage": "ERROR",
+    "es3": "ERROR",
+    "es5Strict": "ERROR",
+    "externsValidation": "OFF",
     "fileoverviewTags": "ERROR",
-    "invalidCasts": "OFF",
+    "globalThis": "ERROR",
+    "internetExplorerChecks": "ERROR",
+    "invalidCasts": "ERROR",
+    "misplacedTypeAnnotation": "OFF",
+    "missingGetCssName": "ERROR",
     "missingProperties": "ERROR",
+    "missingProvide": "ERROR",
+    "missingRequire": "ERROR",
+    "missingReturn": "ERROR",
+    "msgDescriptions": "ERROR",
+    "newCheckTypes": "ERROR",
     "nonStandardJsDocs": "OFF",
-    "undefinedVars": "ERROR"
+    "suspiciousCode": "ERROR",
+    "strictModuleDepCheck": "ERROR",
+    "typeInvalidation": "ERROR",
+    "undefinedNames": "ERROR",
+    "undefinedVars": "ERROR",
+    "unknownDefines": "ERROR",
+    "unusedLocalVariables": "ERROR",
+    "unusedPrivateMembers": "ERROR",
+    "uselessCode": "ERROR",
+    "useOfGoogBase": "OFF",
+    "underscore": "ERROR",
+    "visibility": "ERROR",
+    "accessControls": "ERROR",
+    "ambiguousFunctionDecl": "ERROR",
+    "analyzerChecks": "OFF",
+    "lintChecks": "OFF"
   }
 }

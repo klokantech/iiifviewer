@@ -3,6 +3,9 @@
  * @author petr.sloup@klokantech.com (Petr Sloup)
  *
  * Copyright 2014 Klokan Technologies Gmbh (www.klokantech.com)
+ *
+ * @fileoverview
+ * @suppress {missingRequire}
  */
 
 goog.provide('klokantech.IiifSource');
@@ -17,7 +20,7 @@ goog.require('goog.events');
  *            crossOrigin: (string|null|undefined),
  *            width: number,
  *            height: number,
- *            projection: ol.proj.ProjectionLike,
+ *            projection: ol.ProjectionLike,
  *            extension: (string|undefined),
  *            quality: (string|undefined),
  *            tileSize: (number|undefined)}}

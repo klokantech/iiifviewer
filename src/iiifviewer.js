@@ -3,6 +3,9 @@
  * @author petr.sloup@klokantech.com (Petr Sloup)
  *
  * Copyright 2014 Klokan Technologies Gmbh (www.klokantech.com)
+ *
+ * @fileoverview
+ * @suppress {missingRequire}
  */
 
 goog.provide('klokantech.IiifViewer');
@@ -114,7 +117,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
   if (!url) {
     throw Error('Unable to determine base url');
   }
-  var domains = data['domains'];
+  var domains = /** @type {Array} */(data['domains']);
   if (domains && domains.length > 0) {
     var uri = new goog.Uri(url);
     url = [];
@@ -143,21 +146,20 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
         (this.useWebGL_ ? '' : undefined)
   });
   var layer = new ol.layer.Tile({
-    source: /** @type {!ol.source.Source} */((src))
+    source: src
   });
 
   this.map_ = new ol.Map({
     layers: [layer],
     target: this.mapElement_,
-    renderer: this.useWebGL_ ? 'webgl' : undefined,
+    renderer: this.useWebGL_ ?
+        /** @type {ol.renderer.Type} */('webgl') : undefined,
     view: new ol.View({
       projection: proj,
-      extent: [0, -h, w, 0],
-      zoomFactor: klokantech.IiifViewer.VIEW_ZOOM_FACTOR
+      extent: [0, -h, w, 0]
     }),
     interactions: ol.interaction.defaults({
-      mouseWheelZoom: !goog.isDefAndNotNull(this.ownMWInteraction_),
-      zoomDelta: Math.round(klokantech.IiifViewer.VIEW_ZOOM_RELATION)
+      mouseWheelZoom: !goog.isDefAndNotNull(this.ownMWInteraction_)
     }),
     controls: [],
     logo: false
@@ -168,7 +170,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
   //zoom to permalink
   var hash = window.location.hash;
   if (hash.length > 0 && (hash.indexOf('lat=') > 0 || hash.indexOf('x=') > 0)) {
-    var args = [];
+    var args = {};
     var elements = hash.split('&');
     elements[0] = elements[0].substring(1);
     for (var i = 0; i < elements.length; i++) {
@@ -185,7 +187,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
       this.map_.getView().setResolution(args['res']);
     }
   } else {
-    this.map_.getView().fit(proj.getExtent(), this.map_.getSize() || null);
+    this.map_.getView().fit(proj.getExtent());
   }
 
   if (this.initCallback_)
@@ -202,7 +204,7 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
     var xhr_ = new goog.net.XhrIo(new goog.net.CorsXmlHttpFactory());
     goog.events.listen(xhr_, goog.net.EventType.COMPLETE, function() {
       if (xhr_.isSuccess()) {
-        var data = /** @type {Object.<string, *>} */(xhr_.getResponseJson());
+        var data = /** @type {!Object.<string, *>} */(xhr_.getResponseJson());
         this.init_(data);
       }
     }, false, this);
@@ -215,30 +217,12 @@ klokantech.IiifViewer.prototype.init_ = function(dataOrUrl) {
 
 
 /**
- * @define {number} View zoom factor (2 -> single resolution per data zoom).
- *                  To emulate smoother zooming
- */
-klokantech.IiifViewer.VIEW_ZOOM_FACTOR = 1.1;
-
-
-/**
- * @type {number} Relation between view zoom level and data zoom level.
- */
-klokantech.IiifViewer.VIEW_ZOOM_RELATION =
-    Math.LN2 / Math.log(klokantech.IiifViewer.VIEW_ZOOM_FACTOR);
-
-
-/**
  * Calculates floating-point zoom level independent on the view smoothness.
- * @return {number}
+ * @return {number|undefined}
  * @private
  */
 klokantech.IiifViewer.prototype.getPermazoom_ = function() {
-  var viewZoom = this.map_.getView().getZoom();
-  if (viewZoom) {
-    viewZoom /= klokantech.IiifViewer.VIEW_ZOOM_RELATION;
-  }
-  return viewZoom;
+  return this.map_.getView().getZoom();
 };
 
 
@@ -248,8 +232,7 @@ klokantech.IiifViewer.prototype.getPermazoom_ = function() {
  * @private
  */
 klokantech.IiifViewer.prototype.setPermazoom_ = function(permazoom) {
-  var viewZoom = klokantech.IiifViewer.VIEW_ZOOM_RELATION * permazoom;
-  this.map_.getView().setZoom(Math.round(viewZoom));
+  this.map_.getView().setZoom(permazoom);
 };
 
 

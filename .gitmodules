@@ -1,3 +1,3 @@
 [submodule "ol3js"]
-	path = ol3js
-	url = https://github.com/openlayers/ol3.git
+	path = ol
+	url = https://github.com/openlayers/openlayers.git
