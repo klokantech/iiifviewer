@@ -37,7 +37,7 @@ klokantech.IiifSourceOptions;
 klokantech.IiifSource = function(options) {
   var baseUrl = options.baseUrl,
       extension = options.extension || 'jpg',
-      quality = options.quality || 'native',
+      quality = options.quality || 'default',
       width = options.width,
       height = options.height,
       tileSize = options.tileSize || 256;

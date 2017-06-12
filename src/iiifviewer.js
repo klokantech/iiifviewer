@@ -102,8 +102,6 @@ klokantech.IiifViewer.prototype.getMap = function() {
  * @private
  */
 klokantech.IiifViewer.prototype.initLayer_ = function(data) {
-  var w = /** @type {number} */(data['width']),
-          h = /** @type {number} */(data['height']);
   var url = /** @type {string|undefined} */(data['@id']);
   if (!url) {
     var host = data['image_host'], id = data['identifier'];
@@ -126,22 +124,39 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
       url.push(uri.toString());
     });
   }
+
   var tiles = (data['tiles'] || [{}])[0];
+  var width = /** @type {number} */(data['width']),
+      height = /** @type {number} */(data['height']);
+  var tileSize = /** @type {number} */
+      (tiles['width'] || data['tile_width'] || 256);
+  var resolutions = /** @type {!Array.<number>} */
+      (tiles['scaleFactors'] || data['scale_factors'] || []);
+  if (resolutions.length == 0) {
+    var r_ = 1;
+    while (Math.max(width, height) / r_ > tileSize) {
+      resolutions.push(r_);
+      r_ *= 2;
+    }
+  }
+  var quality =
+      (!data['@context'] || data['@context'].match(/\/1\.1\/context\.json$/i)) ?
+      'native' : 'default';
+
   var proj = new ol.proj.Projection({
     code: 'IIIF',
     units: 'pixels',
-    extent: [0, -h, w, 0]
+    extent: [0, -height, width, 0]
   });
   var src = new klokantech.IiifSource({
     baseUrl: url,
-    width: w,
-    height: h,
-    resolutions: /** @type {!Array.<number>} */
-        (data['scale_factors'] || tiles['scaleFactors']),
-    extension: /** @type {string|undefined} */((data['formats'] || [])[0]),
-    tileSize: /** @type {number|undefined} */
-        (data['tile_width'] || tiles['width'] || undefined),
+    width: width,
+    height: height,
+    resolutions: resolutions,
+    extension: 'jpg',
+    tileSize: tileSize,
     projection: proj,
+    quality: quality,
     crossOrigin: goog.isString(this.crossOrigin_) ? this.crossOrigin_ :
         (this.useWebGL_ ? '' : undefined)
   });
@@ -156,7 +171,7 @@ klokantech.IiifViewer.prototype.initLayer_ = function(data) {
         /** @type {ol.renderer.Type} */('webgl') : undefined,
     view: new ol.View({
       projection: proj,
-      extent: [0, -h, w, 0]
+      extent: [0, -height, width, 0]
     }),
     interactions: ol.interaction.defaults({
       mouseWheelZoom: !goog.isDefAndNotNull(this.ownMWInteraction_)
