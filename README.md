@@ -1,6 +1,6 @@
 ![IIIF viewer Logo](http://klokantech.github.io/iiifviewer/img/iiifviewer-logo.png) IIIFViewer
 ==========
-*IIIF WebGL / Canvas / DOM mobile-ready fast viewer powered by OpenLayers V3.*
+*IIIF WebGL / Canvas mobile-ready fast viewer powered by OpenLayers*
 
 IIIF viewer from Klokan Technologies is optimized for desktop and mobile devices (iOS, Android), is open-source, free to use and has, compared to other viewers, the following extra features:
 

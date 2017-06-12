@@ -3,7 +3,7 @@
 
   "mode": "ADVANCED",
 
-  "output-wrapper": "/* IiifViewer; Copyright (C) 2017 - Klokan Technologies GmbH; Powered by OpenLayers 3 */\n(function() {%output%})();",
+  "output-wrapper": "/* IiifViewer; Copyright (C) 2017 - Klokan Technologies GmbH; Powered by OpenLayers */\n(function() {%output%})();",
 
   "define": {
     "goog.DEBUG": false
