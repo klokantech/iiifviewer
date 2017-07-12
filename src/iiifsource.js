@@ -11,7 +11,11 @@
 goog.provide('klokantech.IiifSource');
 
 
+goog.require('goog.Uri');
+goog.require('goog.array');
+goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.math');
 
 
 /**
@@ -136,3 +140,72 @@ klokantech.IiifSource = function(options) {
   }
 };
 goog.inherits(klokantech.IiifSource, ol.source.TileImage);
+
+
+
+/**
+ * @param {Object.<string, *>} data
+ * @param {string=} opt_guessedUrl
+ * @param {string=} opt_crossOrigin
+ * @return {klokantech.IiifSource}
+ */
+klokantech.IiifSource.createFromInfo =
+    function(data, opt_guessedUrl, opt_crossOrigin) {
+  var url = /** @type {string|undefined} */(data['@id']);
+  if (!url) {
+    var host = data['image_host'], id = data['identifier'];
+    if (host && id) {
+      url = /** @type {string} */(host + id);
+    }
+  }
+  if (!url) {
+    url = opt_guessedUrl;
+  }
+  if (!url) {
+    throw Error('Unable to determine base url');
+  }
+  var domains = /** @type {Array} */(data['domains']);
+  if (domains && domains.length > 0) {
+    var uri = new goog.Uri(url);
+    url = [];
+    goog.array.forEach(domains, function(domain) {
+      uri.setDomain(domain);
+      url.push(uri.toString());
+    });
+  }
+
+  var tiles = (data['tiles'] || [{}])[0];
+  var width = /** @type {number} */(data['width']),
+      height = /** @type {number} */(data['height']);
+  var tileSize = /** @type {number} */
+      (tiles['width'] || data['tile_width'] || 256);
+  var resolutions = /** @type {!Array.<number>} */
+      (tiles['scaleFactors'] || data['scale_factors'] || []);
+  if (resolutions.length == 0) {
+    var r_ = 1;
+    while (Math.max(width, height) / r_ > tileSize) {
+      resolutions.push(r_);
+      r_ *= 2;
+    }
+  }
+  var quality =
+      (!data['@context'] || data['@context'].match(/\/1\.1\/context\.json$/i)) ?
+      'native' : 'default';
+
+  var proj = new ol.proj.Projection({
+    code: 'IIIF',
+    units: 'pixels',
+    extent: [0, -height, width, 0]
+  });
+  return new klokantech.IiifSource({
+    baseUrl: url,
+    width: width,
+    height: height,
+    resolutions: resolutions.concat(),
+    extension: 'jpg',
+    tileSize: tileSize,
+    projection: proj,
+    quality: quality,
+    crossOrigin: opt_crossOrigin
+  });
+};
