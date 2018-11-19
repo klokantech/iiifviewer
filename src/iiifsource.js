@@ -44,14 +44,41 @@ klokantech.IiifSource = function(options) {
       quality = options.quality || 'default',
       width = options.width,
       height = options.height,
-      tileSize = options.tileSize || 256;
+      tileSize = options.tileSize || 256,
+      resolutions = options.resolutions;
 
   var ceil_log2 = function(x) {
     return Math.ceil(Math.log(x) / Math.LN2);
   };
 
-  var maxZoom = Math.max(ceil_log2(width / tileSize),
-                         ceil_log2(height / tileSize));
+  // sort resolutions because the spec does not specify any order
+  resolutions.sort(function(a, b) {
+    return a - b;
+  });
+
+  var ignoreScaleFactors = false,
+      maxZoom;
+  // check if provided resolutions are consecutive powers to 2
+  for (var i=0; i < resolutions.length; i++) {
+    if (Math.pow(2,i) != resolutions[i]) {
+      ignoreScaleFactors = true;
+      break;
+    }
+  }
+
+  // no resolutions are provided or they can't be continuously calculated with a zoomFactor of 2
+  if (resolutions.length == 0 || ignoreScaleFactors) {
+    maxZoom = Math.max(ceil_log2(width / tileSize),
+                       ceil_log2(height / tileSize));
+    // provide resolutions from 2^0 to 2^maxZoom
+    resolutions = [];
+    for (var i = 0; i <= maxZoom; i++) {
+      resolutions.push(Math.pow(2,i));
+    }
+  } else {
+    var maxScaleFactor = Math.max.apply(null, resolutions);
+    maxZoom = Math.round(Math.log(maxScaleFactor) / Math.LN2);
+  }
 
   var tierSizes = [];
   for (var i = 0; i <= maxZoom; i++) {
@@ -66,8 +93,8 @@ klokantech.IiifSource = function(options) {
   var tilePixelRatio = Math.min((window.devicePixelRatio || 1), 4);
 
   var logicalTileSize = tileSize / tilePixelRatio;
-  var logicalResolutions = tilePixelRatio == 1 ? options.resolutions :
-      goog.array.map(options.resolutions, function(el, i, arr) {
+  var logicalResolutions = tilePixelRatio == 1 ? resolutions :
+      goog.array.map(resolutions, function(el, i, arr) {
         return el * tilePixelRatio;
       });
 
