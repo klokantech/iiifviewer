@@ -2,6 +2,10 @@
 ==========
 *IIIF WebGL / Canvas mobile-ready fast viewer powered by OpenLayers*
 
+> **DEPRECATED**: no longer maintained.
+> We recommend using OpenLayers instead, which now has support for IIIF out of the box:
+https://openlayers.org/en/master/examples/iiif.html (to be part of OpenLayers v6)
+
 IIIF viewer from Klokan Technologies is optimized for desktop and mobile devices (iOS, Android), is open-source, free to use and has, compared to other viewers, the following extra features:
 
 - Rotation on client side: pinch with fingers, alt-shift drag with the mouse.
